@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎁 Dein Überraschungsgeschenk</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Sacramento&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Quicksand', sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    transition: background 1.5s ease;
+  }
+  .bg.reveal-hiking   { background: linear-gradient(135deg, #2d5016, #5a8a3c, #8fc36a); }
+  .bg.reveal-london   { background: linear-gradient(135deg, #1a1a2e, #c0392b, #1a1a2e); }
+  .bg.reveal-danzig   { background: linear-gradient(135deg, #0d3b66, #f4d35e, #ee964b); }
+
+  /* floating particles */
+  .particles {
+    position: fixed; inset: 0; pointer-events: none; z-index: -1;
+  }
+  .particle {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    animation: float linear infinite;
+  }
+  @keyframes float {
+    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+
+  .card {
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 24px;
+    padding: 48px 40px;
+    max-width: 560px;
+    width: 90%;
+    text-align: center;
+    color: #fff;
+    animation: fadeIn 0.6s ease;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    position: relative;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .card h2 {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  .card .question {
+    font-size: 1.45rem;
+    line-height: 1.5;
+    margin-bottom: 36px;
+    font-weight: 600;
+  }
+
+  .hint {
+    background: rgba(255,255,255,0.06);
+    border-left: 3px solid rgba(255,255,255,0.3);
+    padding: 14px 18px;
+    margin: 0 0 32px 0;
+    border-radius: 0 12px 12px 0;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.5;
+    font-style: italic;
+    text-align: left;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 16px 36px;
+    border: 2px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    border-radius: 60px;
+    font-size: 1.05rem;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 160px;
+  }
+  .btn:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  }
+
+  .progress {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    border-radius: 24px 24px 0 0;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+
+  /* Reveal styles */
+  .reveal-title {
+    font-family: 'Sacramento', cursive;
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .reveal-destination {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 16px 0 24px;
+    text-transform: uppercase;
+  }
+  .reveal-details {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 28px;
+    text-align: left;
+  }
+
+  .emoji-big {
+    font-size: 4rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .confetti-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+  }
+  .confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  .restart-link {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-top: 10px;
+    display: inline-block;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  .restart-link:hover { color: rgba(255,255,255,0.9); }
+</style>
+</head>
+<body>
+
+<div class="bg" id="bg"></div>
+
+<div class="particles" id="particles"></div>
+
+<div id="app"></div>
+
+<div class="confetti-container" id="confetti"></div>
+
+<script>
+// ─── Decision Tree ───────────────────────────────────────────
+const nodes = {
+  start: {
+    label: "Los geht's",
+    question: "Willkommen zu deinem Überraschungsgeschenk! 🎁✨ Bereit für ein kleines Abenteuer?",
+    hint: null,
+    options: [
+      { text: "Ich bin bereit!", next: "q1" }
+    ]
+  },
+  q1: {
+    label: "Frage 1 von 7",
+    question: "Hast du in nächster Zeit einen Urlaubstag zur Verfügung?",
+    hint: null,
+    options: [
+      { text: "Ja, klar! 🙌", next: "q3" },
+      { text: "Leider nein 😬", next: "q2" }
+    ]
+  },
+  q2: {
+    label: "Frage 2 von 7",
+    question: "Hmm, schade! Aber hast du vielleicht an einem der Feiertage 2026 noch frei? Christi Himmelfahrt, Pfingsten, Tag der Deutschen Einheit …",
+    hint: null,
+    options: [
+      { text: "Ja, da geht was! ✅", next: "q3" },
+      { text: "Auch nicht 😭", next: "loopback" }
+    ]
+  },
+  loopback: {
+    label: "Netter Versuch …",
+    question: "Ohne freien Tag wird das schwierig! Aber keine Sorge – vielleicht findest du doch noch einen. Schau nochmal in den Kalender und versuch's erneut! 📅",
+    hint: null,
+    options: [
+      { text: "Okay, nochmal! 🔄", next: "q1" }
+    ]
+  },
+  q3: {
+    label: "Frage 3 von 7",
+    question: "Ein geheimnisvoller Umschlag liegt vor dir. Er duftet nach Abenteuer! Was packst du als Erstes ein?",
+    hint: "💡 Tipp: Hör auf dein Bauchgefühl …",
+    options: [
+      { text: "Feste Wanderstiefel 🥾", next: "q4_hike" },
+      { text: "Stylische City-Sneaker 👟", next: "q5_city" }
+    ]
+  },
+
+  // ─── Hiking Branch ───
+  q4_hike: {
+    label: "Frage 4 von 7",
+    question: "Dein Wecker klingelt um 5:30 Uhr morgens. Wie reagierst du?",
+    hint: "🔎 Geheime Info: An deinem möglichen Ziel gibt es keinen Handyempfang. Dafür Sterne, die du in der Stadt nie siehst.",
+    options: [
+      { text: "Challenge accepted! 🌄", next: "q4b_hike" },
+      { text: "Snooze! Ich bin im Urlaub! 😴", next: "q5_city" }
+    ]
+  },
+  q4b_hike: {
+    label: "Frage 5 von 7",
+    question: "Dein perfektes Abendessen nach einem langen Tag?",
+    hint: "🔎 Geheime Info: Dort, wo du vielleicht hingehst, wird das Essen auf einer Holzbank serviert – mit Panoramablick inklusive.",
+    options: [
+      { text: "Käsespätzle & Kaiserschmarrn 🧀", next: "q_hike_final" },
+      { text: "Eigentlich doch lieber Streetfood 🍜", next: "q5_city" }
+    ]
+  },
+  q_hike_final: {
+    label: "Frage 6 von 7",
+    question: "Letzte Frage: Wenn du morgens die Tür öffnest, was willst du sehen?",
+    hint: "🔎 Geheime Info: An deinem Ziel liegen die Wolken UNTER dir.",
+    options: [
+      { text: "Bergpanorama & Morgennebel ⛰️", next: "reveal_hiking" },
+      { text: "Hmm, doch lieber eine Skyline 🏙️", next: "q5_city" }
+    ]
+  },
+
+  // ─── City Branch ───
+  q5_city: {
+    label: "Frage 5 von 7",
+    question: "Du stehst an einer Kreuzung in einer fremden Stadt. Links riecht es nach Salzwasser und Bernstein. Rechts nach Earl Grey und frisch gebackenen Scones. Wohin gehst du?",
+    hint: "🔎 Geheime Info: Beide Wege führen zu einem unvergesslichen Ziel …",
+    options: [
+      { text: "Links – Salzwasser & Bernstein 🌊", next: "q6_danzig" },
+      { text: "Rechts – Earl Grey & Scones ☕", next: "q6_london" }
+    ]
+  },
+
+  // ─── Danzig Branch ───
+  q6_danzig: {
+    label: "Frage 6 von 7",
+    question: "Interessant! Noch eine Frage: Was klingt verlockender?",
+    hint: '🔎 Geheime Info: An deinem möglichen Ziel wurde jahrhundertelang "flüssiges Gold" gehandelt – und die Häuserfassaden sehen aus wie aus einem Wes-Anderson-Film.',
+    options: [
+      { text: "Pierogi & Craft Beer 🥟🍺", next: "q_danzig_final" },
+      { text: "Fish & Chips am Themseufer 🐟", next: "q6_london" }
+    ]
+  },
+  q_danzig_final: {
+    label: "Frage 7 von 7",
+    question: "Fast geschafft! Stell dir vor: Ein Spaziergang an der Ostsee bei Sonnenuntergang, gotische Backsteintürme im Hintergrund, in der Hand ein frisches Piwo. Klingt das nach dir?",
+    hint: '🔎 Geheime Info: Diese Stadt hat einen der schönsten Weihnachtsmärkte Europas und eine Straße, die komplett aus Gold zu sein scheint.',
+    options: [
+      { text: "Ja, absolut! 😍", next: "reveal_danzig" },
+      { text: "Klingt gut, aber …", next: "reveal_danzig" }
+    ]
+  },
+
+  // ─── London Branch ───
+  q6_london: {
+    label: "Frage 6 von 7",
+    question: "Spannend! Was würdest du in einer fremden Stadt als Erstes machen?",
+    hint: '🔎 Geheime Info: An deinem möglichen Ziel fährt man auf der \u201Efalschen\u201C Straßenseite, und um 17 Uhr wird WIRKLICH Tee getrunken.',
+    options: [
+      { text: "Ein Riesenrad am Fluss besteigen 🎡", next: "q_london_final" },
+      { text: "Alte Hafenstadt erkunden ⚓", next: "q6_danzig" }
+    ]
+  },
+  q_london_final: {
+    label: "Frage 7 von 7",
+    question: 'Letzte Frage! Du sitzt in einem roten Doppeldeckerbus, fährst an einem Palast vorbei, und jemand neben dir sagt \u201ECheers, mate!\u201C Wie f\u00FChlst du dich?',
+    hint: "🔎 Geheime Info: In dieser Stadt regiert (fast) eine Königin, das Bier ist warm, und das Frühstück enthält Bohnen. Ja, Bohnen.",
+    options: [
+      { text: "Das ist mein happy place! 🇬🇧", next: "reveal_london" },
+      { text: "Egal, ich bin dabei! 🎉", next: "reveal_london" }
+    ]
+  },
+
+  // ─── Reveals ───
+  reveal_hiking: {
+    type: "reveal",
+    bgClass: "reveal-hiking",
+    emoji: "⛰️🥾✨",
+    title: "Überraschung!",
+    destination: "3-Tage Hüttenwanderung",
+    details: "Pack deine Wanderstiefel – es geht raus in die Berge! Drei Tage, von Hütte zu Hütte, mit atemberaubenden Panoramen, Sonnenaufgängen über den Gipfeln und abends Hüttenromantik mit Käsespätzle und guten Gesprächen. Kein WLAN, kein Stress – nur du, die Natur und das Abenteuer. 🏔️"
+  },
+  reveal_london: {
+    type: "reveal",
+    bgClass: "reveal-london",
+    emoji: "🇬🇧🎡✨",
+    title: "Überraschung!",
+    destination: "London",
+    details: "Es geht nach London, Baby! Die Stadt der roten Busse, des Big Ben, der West End Shows und der besten Pubs der Welt. Erkunde die Tate Modern, schlendere durch Camden Market, trink Afternoon Tea wie die Royals und lass dich vom Großstadtflair verzaubern. God save the trip! 🎩"
+  },
+  reveal_danzig: {
+    type: "reveal",
+    bgClass: "reveal-danzig",
+    emoji: "🏰🌊✨",
+    title: "Überraschung!",
+    destination: "Danzig (Gdańsk)",
+    details: "Willkommen in Danzig – der Perle der Ostsee! Bunte Bürgerhäuser, gotische Backsteinkirchen, der Duft von frischen Pierogi in der Luft und die berühmte Bernsteinstraße, die in der Sonne glitzert. Erkunde die historische Altstadt, spaziere am Strand von Sopot und genieße das polnische Lebensgefühl. Na zdrowie! 🥂"
+  }
+};
+
+// ─── Rendering ───────────────────────────────────────────────
+const app = document.getElementById('app');
+const bg = document.getElementById('bg');
+
+const totalSteps = 7;
+
+function getStepNumber(label) {
+  if (!label) return 0;
+  const m = label.match(/(\d+)\s*von/);
+  return m ? parseInt(m[1]) : 0;
+}
+
+function render(nodeId) {
+  const node = nodes[nodeId];
+  if (!node) return;
+
+  // Remove old bg classes
+  bg.className = 'bg';
+
+  if (node.type === 'reveal') {
+    bg.classList.add(node.bgClass);
+    launchConfetti();
+
+    app.innerHTML = `
+      <div class="card" style="max-width: 620px;">
+        <span class="emoji-big">${node.emoji}</span>
+        <div class="reveal-title">${node.title}</div>
+        <div class="reveal-destination">${node.destination}</div>
+        <div class="reveal-details">${node.details}</div>
+        <div class="buttons">
+          <button class="btn" onclick="render('start')">🔄 Nochmal spielen</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const step = getStepNumber(node.label);
+  const progressPct = step > 0 ? (step / totalSteps) * 100 : 0;
+
+  const hintHTML = node.hint
+    ? `<div class="hint">${node.hint}</div>`
+    : '';
+
+  const buttonsHTML = node.options
+    .map(o => `<button class="btn" onclick="render('${o.next}')">${o.text}</button>`)
+    .join('');
+
+  app.innerHTML = `
+    <div class="card">
+      <div class="progress"><div class="progress-bar" style="width:${progressPct}%"></div></div>
+      <h2>${node.label}</h2>
+      <div class="question">${node.question}</div>
+      ${hintHTML}
+      <div class="buttons">${buttonsHTML}</div>
+    </div>
+  `;
+}
+
+// ─── Confetti ────────────────────────────────────────────────
+function launchConfetti() {
+  const container = document.getElementById('confetti');
+  container.innerHTML = '';
+  const colors = ['#f7971e','#ffd200','#ff6b6b','#48dbfb','#ff9ff3','#54a0ff','#5f27cd','#01a3a4'];
+  for (let i = 0; i < 100; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.width = (Math.random() * 8 + 6) + 'px';
+    piece.style.height = (Math.random() * 8 + 6) + 'px';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.animationDuration = (Math.random() * 2 + 2) + 's';
+    piece.style.animationDelay = (Math.random() * 1.5) + 's';
+    container.appendChild(piece);
+  }
+  setTimeout(() => container.innerHTML = '', 5000);
+}
+
+// ─── Particles ───────────────────────────────────────────────
+function createParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (Math.random() * 8 + 6) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.width = p.style.height = (Math.random() * 4 + 3) + 'px';
+    container.appendChild(p);
+  }
+}
+
+createParticles();
+render('start');
+</script>
+</body>
+</html>
