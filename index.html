@@ -47,6 +47,10 @@
     background: rgba(255,255,255,0.12); border-radius: 50%;
     animation: pfloat linear infinite;
   }
+  .particle.heart {
+    background: none; width: auto; height: auto;
+    font-size: 14px; line-height: 1;
+  }
   @keyframes pfloat {
     0%   { transform: translateY(100vh) scale(0); opacity: 0; }
     10%  { opacity: 1; }
@@ -54,21 +58,32 @@
     100% { transform: translateY(-10vh) scale(1); opacity: 0; }
   }
 
+  #app { position: relative; max-width: 620px; width: 92%; }
+
   .card {
     background: rgba(255,255,255,0.07);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255,255,255,0.15);
     border-radius: 24px;
     padding: 44px 38px;
-    max-width: 580px; width: 92%;
+    width: 100%;
     text-align: center; color: #fff;
-    animation: fadeIn 0.5s ease;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     position: relative;
   }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(24px) scale(0.96); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+  .card.slide-in {
+    animation: slideIn 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(60px) scale(0.97); }
+    to   { opacity: 1; transform: translateX(0) scale(1); }
+  }
+  .card.slide-out {
+    animation: slideOut 0.3s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
+  }
+  @keyframes slideOut {
+    from { opacity: 1; transform: translateX(0) scale(1); }
+    to   { opacity: 0; transform: translateX(-60px) scale(0.97); }
   }
 
   .card h2 {
@@ -115,6 +130,36 @@
   .reveal-details { font-size: 1.02rem; line-height: 1.7; color: rgba(255,255,255,0.85); margin-bottom: 24px; text-align: left; }
   .emoji-big { font-size: 3.8rem; margin-bottom: 14px; display: block; }
 
+  .intro-greeting { font-family: 'Sacramento', cursive; font-size: 2.8rem; margin-bottom: 16px; line-height: 1.2; }
+  .intro-text { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.9); margin-bottom: 28px; text-align: left; }
+  .intro-sign { font-family: 'Sacramento', cursive; font-size: 2rem; color: rgba(255,255,255,0.7); margin-top: 8px; text-align: right; }
+
+  .drumroll-emoji {
+    font-size: 5rem; display: block; margin-bottom: 20px;
+    animation: drumShake 0.15s ease-in-out infinite alternate;
+  }
+  .drumroll-text {
+    font-size: 1.4rem; font-weight: 700;
+    animation: drumPulse 0.6s ease-in-out infinite;
+  }
+  .drumroll-dots::after {
+    content: ''; animation: dots 1.5s steps(4, end) infinite;
+  }
+  @keyframes drumShake {
+    0%   { transform: rotate(-8deg) scale(1); }
+    100% { transform: rotate(8deg) scale(1.08); }
+  }
+  @keyframes drumPulse {
+    0%, 100% { opacity: 0.6; }
+    50%      { opacity: 1; }
+  }
+  @keyframes dots {
+    0%   { content: ''; }
+    25%  { content: '.'; }
+    50%  { content: '..'; }
+    75%  { content: '...'; }
+  }
+
   .confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
   .confetti-piece {
     position: absolute; width: 10px; height: 10px; top: -10px;
@@ -134,21 +179,35 @@
 <div class="confetti-container" id="confetti"></div>
 
 <script>
-const MAX_STEP = 9;
+const MAX_STEP = 13;
 
 const nodes = {
 
   // ══════════════════ EINSTIEG ══════════════════
+  intro: {
+    type: "intro"
+  },
+
   start: {
     step: 0,
     question: "Willkommen! Hinter diesen Fragen verbirgt sich ein Geschenk. Bereit?",
     options: [
-      { text: "Ich bin bereit!", next: "q1" }
+      { text: "Ich bin bereit!", next: "q_personal1" }
+    ]
+  },
+
+  // ══════════════════ PERSÖNLICH 1 ══════════════════
+  q_personal1: {
+    step: 1,
+    question: "Nehmen wir wieder ein Seil mit?",
+    options: [
+      { text: "Zum Surfen... klar!", next: "q1" },
+      { text: "Wozu genau? \ud83d\ude0f", next: "q1" }
     ]
   },
 
   q1: {
-    step: 1,
+    step: 2,
     question: "Hast du in n\u00e4chster Zeit einen Urlaubstag zur Verf\u00fcgung?",
     options: [
       { text: "Ja!", next: "q3" },
@@ -157,7 +216,7 @@ const nodes = {
   },
 
   q2: {
-    step: 1,
+    step: 2,
     question: "Hmm. Und an einem der Feiertage 2026 \u2013 Christi Himmelfahrt, Pfingsten, Tag der Deutschen Einheit? Ist da noch was frei?",
     options: [
       { text: "Da geht was!", next: "q3" },
@@ -166,7 +225,7 @@ const nodes = {
   },
 
   loopback: {
-    step: 1,
+    step: 2,
     question: "Ohne freien Tag wird das schwierig! Schau nochmal in den Kalender \u2013 irgendwo versteckt sich bestimmt noch ein Tag.",
     options: [
       { text: "Okay, nochmal!", next: "q1" }
@@ -175,16 +234,26 @@ const nodes = {
 
   // ══════════════════ ERSTE GABELUNG ══════════════════
   q3: {
-    step: 2,
+    step: 3,
     question: "Du packst f\u00fcr eine Reise. Was kommt zuerst in den Koffer?",
     options: [
-      { text: "Was Bequemes, Praktisches", next: "q4_practical" },
-      { text: "Was Schickes f\u00fcr abends", next: "q4_stylish" }
+      { text: "Was Bequemes, Praktisches", next: "q_personal2" },
+      { text: "Was Schickes f\u00fcr abends", next: "q_personal2" }
+    ]
+  },
+
+  // ══════════════════ PERSÖNLICH 2 ══════════════════
+  q_personal2: {
+    step: 4,
+    question: "Hand aufs Herz: Was brauchst du gerade mehr?",
+    options: [
+      { text: "Abenteuer \u2013 raus aus dem Alltag!", next: "q4_practical" },
+      { text: "Quality Time zu zweit", next: "q4_stylish" }
     ]
   },
 
   q4_practical: {
-    step: 3,
+    step: 5,
     question: "Dein Handyakku ist bei 3%. Wie reagierst du?",
     hint: "Manche Orte sind sch\u00f6ner ohne Display.",
     options: [
@@ -194,7 +263,7 @@ const nodes = {
   },
 
   q4_stylish: {
-    step: 3,
+    step: 5,
     question: "Samstagnachmittag im Urlaub. Wo findet man dich?",
     options: [
       { text: "Auf einem Markt, st\u00f6bernd", next: "q5_explore" },
@@ -204,7 +273,7 @@ const nodes = {
 
   // ══════════════════ ZWEITE EBENE ══════════════════
   q5_offline: {
-    step: 4,
+    step: 6,
     question: "Der Wecker klingelt um 5:30. Was denkst du?",
     hint: "Es gibt Orte, da ist 5:30 Uhr die beste Zeit des Tages.",
     options: [
@@ -214,7 +283,7 @@ const nodes = {
   },
 
   q5_connected: {
-    step: 4,
+    step: 6,
     question: "Du hast zwei Stunden in einer fremden Stadt. Was machst du?",
     options: [
       { text: "Einfach loslaufen und schauen", next: "q6_wander" },
@@ -223,7 +292,7 @@ const nodes = {
   },
 
   q5_explore: {
-    step: 4,
+    step: 6,
     question: "Das beste Souvenir ist ...",
     hint: "An manchen Orten liegen die sch\u00f6nsten Souvenirs einfach so herum.",
     options: [
@@ -233,7 +302,7 @@ const nodes = {
   },
 
   q5_cafe: {
-    step: 4,
+    step: 6,
     question: "Was bestellst du?",
     options: [
       { text: "Tee. Am liebsten mit Milch.", next: "q6_tea" },
@@ -243,7 +312,7 @@ const nodes = {
 
   // ══════════════════ DRITTE EBENE ══════════════════
   q6_earlybird: {
-    step: 5,
+    step: 7,
     question: "Abendessen nach einem richtig langen Tag. Was klingt besser?",
     hint: "Manchmal schmeckt einfaches Essen am besten \u2013 besonders wenn die Aussicht stimmt.",
     options: [
@@ -253,7 +322,7 @@ const nodes = {
   },
 
   q6_wander: {
-    step: 5,
+    step: 7,
     question: "Du malst eine Postkarte. Was ist drauf?",
     options: [
       { text: "Bunte H\u00e4user an einem Fluss", next: "q7_colorful" },
@@ -262,7 +331,7 @@ const nodes = {
   },
 
   q6_planner: {
-    step: 5,
+    step: 7,
     question: "Welches Museum zuerst?",
     options: [
       { text: "Moderne Kunst in einem alten Industriebau", next: "q7_skyline" },
@@ -271,7 +340,7 @@ const nodes = {
   },
 
   q6_natural: {
-    step: 5,
+    step: 7,
     question: "Gold oder Silber?",
     hint: "Nicht alles, was golden ist, wurde von Menschen gemacht.",
     options: [
@@ -281,7 +350,7 @@ const nodes = {
   },
 
   q6_vintage: {
-    step: 5,
+    step: 7,
     question: "Wie erkundest du eine Stadt am liebsten?",
     hint: "Manche Transportmittel sind selbst eine Sehensw\u00fcrdigkeit.",
     options: [
@@ -291,7 +360,7 @@ const nodes = {
   },
 
   q6_tea: {
-    step: 5,
+    step: 7,
     question: "Scones: Erst Cream oder erst Marmelade?",
     hint: "An einem bestimmten Ort ist genau das eine Grundsatzdebatte.",
     options: [
@@ -301,7 +370,7 @@ const nodes = {
   },
 
   q6_beer: {
-    step: 5,
+    step: 7,
     question: "Wo trinkst du es am liebsten?",
     options: [
       { text: "An einer Hafenpromenade", next: "q7_amber" },
@@ -311,68 +380,96 @@ const nodes = {
 
   // ══════════════════ VIERTE EBENE (CROSSOVERS) ══════════════════
   q7_rustic: {
-    step: 6,
+    step: 8,
     question: "Morgennebel, Stille, Holzgeruch. Wie klingt das?",
     hint: "Es gibt Orte, da sind die Wolken unter dir.",
     options: [
-      { text: "Genau mein Ding", next: "q8_hike" },
+      { text: "Genau mein Ding", next: "q_personal3_hike" },
       { text: "Sch\u00f6n, aber mir fehlen die Menschen", next: "q7_colorful" }
     ]
   },
 
   q7_colorful: {
-    step: 6,
+    step: 8,
     question: "In einer Altstadt riecht es nach frischem Geb\u00e4ck. Aus einer T\u00fcr h\u00f6rst du Musik. Du ...",
     hint: "Manche St\u00e4dte wurden aus Asche wiedergeboren \u2013 und sind heute bunter als je zuvor.",
     options: [
-      { text: "Gehe rein und bestelle blind", next: "q8_danzig" },
+      { text: "Gehe rein und bestelle blind", next: "q_personal3_danzig" },
       { text: "Laufe weiter \u2013 was ist hinter der n\u00e4chsten Ecke?", next: "q7_skyline" }
     ]
   },
 
   q7_skyline: {
-    step: 6,
+    step: 8,
     question: "Es f\u00e4ngt an zu regnen. Deine Reaktion?",
     hint: "An manchen Orten geh\u00f6rt Regen zum Charme dazu.",
     options: [
-      { text: "Perfekt \u2013 Regen macht alles stimmungsvoller", next: "q8_london" },
+      { text: "Perfekt \u2013 Regen macht alles stimmungsvoller", next: "q_personal3_london" },
       { text: "Ich such mir ein gem\u00fctliches Dach", next: "q7_colorful" }
     ]
   },
 
   q7_amber: {
-    step: 6,
+    step: 8,
     question: "Am Strand findest du etwas, das in der Sonne golden leuchtet. Du ...",
     hint: "An manchen K\u00fcsten sp\u00fclt das Meer Dinge an, die \u00e4lter sind als die meisten St\u00e4dte.",
     options: [
-      { text: "Stecke es ein \u2013 Gl\u00fccksbringer!", next: "q8_danzig" },
+      { text: "Stecke es ein \u2013 Gl\u00fccksbringer!", next: "q_personal3_danzig" },
       { text: "Sch\u00f6n, aber ich wandere lieber weiter", next: "q7_rustic" }
     ]
   },
 
   q7_double: {
-    step: 6,
+    step: 8,
     question: "Du steigst in einen Bus und merkst: Alle fahren auf der anderen Seite. Irritierend?",
     hint: "Manchmal muss man nur die Perspektive wechseln.",
     options: [
-      { text: "Ich liebe solche kleinen Unterschiede!", next: "q8_london" },
+      { text: "Ich liebe solche kleinen Unterschiede!", next: "q_personal3_london" },
       { text: "Bisschen schon \u2013 ich mag es vertrauter", next: "q7_gothic" }
     ]
   },
 
   q7_gothic: {
-    step: 6,
+    step: 8,
     question: "Hohe Backsteinmauern, schmale Gassen, Kopfsteinpflaster unter den F\u00fc\u00dfen ...",
     hint: "Manche St\u00e4dte tragen ihre Geschichte in jedem Stein.",
     options: [
-      { text: "Das hat Charakter \u2013 ich bleibe!", next: "q8_danzig" },
+      { text: "Das hat Charakter \u2013 ich bleibe!", next: "q_personal3_danzig" },
       { text: "H\u00fcbsch, aber mir fehlt das Gr\u00fcn", next: "q7_rustic" }
+    ]
+  },
+
+  // ══════════════════ PERSÖNLICH 3 ══════════════════
+  q_personal3_hike: {
+    step: 9,
+    question: "Mein Handy vibriert ...",
+    options: [
+      { text: "Wieder 3 s\u00fc\u00dfe Reels auf Insta von meinem Kn\u00f6del", next: "q8_hike" },
+      { text: "Du hast keine Notifications f\u00fcr Insta, ich musste dich wieder an etwas erinnern ...", next: "q8_hike" }
+    ]
+  },
+
+  q_personal3_london: {
+    step: 9,
+    question: "Mein Handy vibriert ...",
+    options: [
+      { text: "Wieder 3 s\u00fc\u00dfe Reels auf Insta von meinem Kn\u00f6del", next: "q8_london" },
+      { text: "Du hast keine Notifications f\u00fcr Insta, ich musste dich wieder an etwas erinnern ...", next: "q8_london" }
+    ]
+  },
+
+  q_personal3_danzig: {
+    step: 9,
+    question: "Mein Handy vibriert ...",
+    options: [
+      { text: "Wieder 3 s\u00fc\u00dfe Reels auf Insta von meinem Kn\u00f6del", next: "q8_danzig" },
+      { text: "Du hast keine Notifications f\u00fcr Insta, ich musste dich wieder an etwas erinnern ...", next: "q8_danzig" }
     ]
   },
 
   // ══════════════════ LETZTE FRAGEN ══════════════════
   q8_hike: {
-    step: 7,
+    step: 10,
     question: "Fast geschafft! Wenn du morgens die T\u00fcr \u00f6ffnest \u2013 was willst du sehen?",
     hint: "Dort, wo du vielleicht hingehst, ist das WLAN-Passwort: gibt es nicht.",
     options: [
@@ -382,7 +479,7 @@ const nodes = {
   },
 
   q8_london: {
-    step: 7,
+    step: 10,
     question: "Fast geschafft! Bohnen zum Fr\u00fchst\u00fcck \u2013 ja oder nein?",
     hint: "An deinem m\u00f6glichen Ziel ist das v\u00f6llig normal. Wirklich.",
     options: [
@@ -392,7 +489,7 @@ const nodes = {
   },
 
   q8_danzig: {
-    step: 7,
+    step: 10,
     question: "Fast geschafft! Was klingt nach dem besseren Abend?",
     hint: "Fun Fact: Dort wo du vielleicht hingehst, sagt man Na zdrowie! beim Ansto\u00dfen.",
     options: [
@@ -403,32 +500,60 @@ const nodes = {
 
   // ══════════════════ ALLERLETZTE FRAGEN ══════════════════
   q9_hike: {
-    step: 8,
+    step: 11,
     question: "Letzte Frage: Was bedeutet Luxus f\u00fcr dich?",
     hint: "Manche Unterk\u00fcnfte haben keine Sterne \u2013 daf\u00fcr sieht man nachts umso mehr davon.",
     options: [
-      { text: "Stille, frische Luft und ein freier Kopf", next: "reveal_hiking" },
-      { text: "Genau das!", next: "reveal_hiking" }
+      { text: "Stille, frische Luft und ein freier Kopf", next: "q_personal4_hike" },
+      { text: "Genau das!", next: "q_personal4_hike" }
     ]
   },
 
   q9_london: {
-    step: 8,
+    step: 11,
     question: "Letzte Frage: Links oder rechts?",
     hint: "An deinem Ziel ist das wichtiger als du denkst \u2013 vor allem beim \u00dcberqueren der Stra\u00dfe.",
     options: [
-      { text: "Links!", next: "reveal_london" },
-      { text: "Rechts!", next: "reveal_london" }
+      { text: "Links!", next: "q_personal4_london" },
+      { text: "Rechts!", next: "q_personal4_london" }
     ]
   },
 
   q9_danzig: {
-    step: 8,
+    step: 11,
     question: "Letzte Frage: Was nimmst du als Andenken mit?",
     hint: "Das beliebteste Mitbringsel von dort ist Millionen Jahre alt \u2013 und durchsichtig.",
     options: [
-      { text: "Etwas Einzigartiges aus der Natur", next: "reveal_danzig" },
-      { text: "Etwas Handgemachtes vom lokalen Markt", next: "reveal_danzig" }
+      { text: "Etwas Einzigartiges aus der Natur", next: "q_personal4_danzig" },
+      { text: "Etwas Handgemachtes vom lokalen Markt", next: "q_personal4_danzig" }
+    ]
+  },
+
+  // ══════════════════ PERSÖNLICH 4 ══════════════════
+  q_personal4_hike: {
+    step: 12,
+    question: "Jetzt wo alles gekl\u00e4rt ist, wird die Reise ...",
+    options: [
+      { text: "Chaotisch \u2013 du hast bestimmt die H\u00e4lfte vergessen einzupacken", next: "reveal_hiking" },
+      { text: "Eine perfekte gemeinsame Zeit", next: "reveal_hiking" }
+    ]
+  },
+
+  q_personal4_london: {
+    step: 12,
+    question: "Jetzt wo alles gekl\u00e4rt ist, wird die Reise ...",
+    options: [
+      { text: "Chaotisch \u2013 du hast bestimmt die H\u00e4lfte vergessen einzupacken", next: "reveal_london" },
+      { text: "Eine perfekte gemeinsame Zeit", next: "reveal_london" }
+    ]
+  },
+
+  q_personal4_danzig: {
+    step: 12,
+    question: "Jetzt wo alles gekl\u00e4rt ist, wird die Reise ...",
+    options: [
+      { text: "Chaotisch \u2013 du hast bestimmt die H\u00e4lfte vergessen einzupacken", next: "reveal_danzig" },
+      { text: "Eine perfekte gemeinsame Zeit", next: "reveal_danzig" }
     ]
   },
 
@@ -460,28 +585,55 @@ const nodes = {
 };
 
 // ─── Rendering ───────────────────────────
-const app = document.getElementById('app');
-const bg  = document.getElementById('bg');
+var app = document.getElementById('app');
+var bg  = document.getElementById('bg');
+var isPersonal = false;
+
+function isPersonalNode(id) {
+  return id && id.indexOf('q_personal') === 0;
+}
+
+function slideTransition(newContent) {
+  var old = app.querySelector('.card');
+  if (!old) {
+    app.innerHTML = newContent;
+    return;
+  }
+  old.classList.remove('slide-in');
+  old.classList.add('slide-out');
+  setTimeout(function() {
+    app.innerHTML = newContent;
+  }, 300);
+}
 
 function render(nodeId) {
-  const n = nodes[nodeId];
+  var n = nodes[nodeId];
   if (!n) return;
 
   bg.className = 'bg';
+  var personal = isPersonalNode(nodeId);
+  setParticleMode(personal);
 
-  if (n.type === 'reveal') {
-    bg.classList.add(n.bgClass);
-    launchConfetti();
-    app.innerHTML =
-      '<div class="card" style="max-width:620px">' +
-        '<span class="emoji-big">' + n.emoji + '</span>' +
-        '<div class="reveal-title">' + n.title + '</div>' +
-        '<div class="reveal-destination">' + n.destination + '</div>' +
-        '<div class="reveal-details">' + n.details + '</div>' +
-        '<div class="buttons">' +
-          '<button class="btn" onclick="render(\'start\')">Nochmal spielen</button>' +
+  if (n.type === 'intro') {
+    var html =
+      '<div class="card slide-in">' +
+        '<div class="intro-greeting">Hey Kn\u00f6del \ud83d\udc9c</div>' +
+        '<div class="intro-text">' +
+          'Mach dich bereit \u2013 die n\u00e4chsten Clicks sind entscheidend \ud83e\udee3\u2728!<br><br>' +
+          'Was es ist verrate ich noch nicht, aber wir werden es gleich erfahren!<br><br>' +
+          'Alles alles Gute zum Geburtstag, ich liebe dich \u00fcber alles \u2764\ufe0f' +
+        '</div>' +
+        '<div class="intro-sign">Dein Julius</div>' +
+        '<div style="margin-top:28px" class="buttons">' +
+          '<button class="btn" onclick="render(\'start\')">Los geht\'s! \ud83c\udf89</button>' +
         '</div>' +
       '</div>';
+    slideTransition(html);
+    return;
+  }
+
+  if (n.type === 'reveal') {
+    showDrumroll(nodeId);
     return;
   }
 
@@ -494,14 +646,43 @@ function render(nodeId) {
     btns += '<button class="btn" onclick="render(\'' + n.options[i].next + '\')">' + n.options[i].text + '</button>';
   }
 
-  app.innerHTML =
-    '<div class="card">' +
+  var html =
+    '<div class="card slide-in">' +
       '<div class="progress"><div class="progress-bar" style="width:' + pct + '%"></div></div>' +
       '<h2>Schritt ' + n.step + ' von ' + MAX_STEP + '</h2>' +
       '<div class="question">' + n.question + '</div>' +
       hintHTML +
       '<div class="buttons">' + btns + '</div>' +
     '</div>';
+  slideTransition(html);
+}
+
+// ─── Drumroll ─────────────────────────────
+function showDrumroll(revealId) {
+  var html =
+    '<div class="card slide-in">' +
+      '<span class="drumroll-emoji">\ud83c\udf81</span>' +
+      '<div class="drumroll-text">Trommelwirbel<span class="drumroll-dots"></span></div>' +
+    '</div>';
+  slideTransition(html);
+  setTimeout(function() { showReveal(revealId); }, 2800);
+}
+
+function showReveal(nodeId) {
+  var n = nodes[nodeId];
+  bg.classList.add(n.bgClass);
+  launchConfetti();
+  var html =
+    '<div class="card slide-in" style="max-width:620px">' +
+      '<span class="emoji-big">' + n.emoji + '</span>' +
+      '<div class="reveal-title">' + n.title + '</div>' +
+      '<div class="reveal-destination">' + n.destination + '</div>' +
+      '<div class="reveal-details">' + n.details + '</div>' +
+      '<div class="buttons">' +
+        '<button class="btn" onclick="render(\'intro\')">Nochmal spielen</button>' +
+      '</div>' +
+    '</div>';
+  slideTransition(html);
 }
 
 // ─── Confetti ────────────────────────────
@@ -525,20 +706,33 @@ function launchConfetti() {
 }
 
 // ─── Particles ───────────────────────────
-(function() {
+function createParticles(hearts) {
   var c = document.getElementById('particles');
+  c.innerHTML = '';
   for (var i = 0; i < 30; i++) {
     var p = document.createElement('div');
-    p.className = 'particle';
+    if (hearts) {
+      p.className = 'particle heart';
+      p.textContent = ['❤️','💜','💕','✨'][Math.floor(Math.random() * 4)];
+    } else {
+      p.className = 'particle';
+      p.style.width = p.style.height = (Math.random() * 4 + 3) + 'px';
+    }
     p.style.left = Math.random() * 100 + '%';
     p.style.animationDuration = (Math.random() * 8 + 6) + 's';
     p.style.animationDelay    = (Math.random() * 10) + 's';
-    p.style.width = p.style.height = (Math.random() * 4 + 3) + 'px';
     c.appendChild(p);
   }
-})();
+}
 
-render('start');
+function setParticleMode(hearts) {
+  if (hearts === isPersonal) return;
+  isPersonal = hearts;
+  createParticles(hearts);
+}
+
+createParticles(false);
+render('intro');
 </script>
 </body>
 </html>
