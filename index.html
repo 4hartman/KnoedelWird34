@@ -188,14 +188,6 @@ const nodes = {
     type: "intro"
   },
 
-  start: {
-    step: 0,
-    question: "Willkommen! Hinter diesen Fragen verbirgt sich ein Geschenk. Bereit?",
-    options: [
-      { text: "Ich bin bereit!", next: "q_personal1" }
-    ]
-  },
-
   // ══════════════════ PERSÖNLICH 1 ══════════════════
   q_personal1: {
     step: 1,
@@ -481,7 +473,7 @@ const nodes = {
   q8_london: {
     step: 10,
     question: "Fast geschafft! Bohnen zum Fr\u00fchst\u00fcck \u2013 ja oder nein?",
-    hint: "An deinem m\u00f6glichen Ziel ist das v\u00f6llig normal. Wirklich.",
+    hint: "An deinem m\u00f6glichen Ziel ist das v\u00f6llig normal.",
     options: [
       { text: "Why not \u2013 ich probier alles!", next: "q9_london" },
       { text: "Auf keinen Fall!", next: "q8_danzig" }
@@ -525,7 +517,7 @@ const nodes = {
     hint: "Das beliebteste Mitbringsel von dort ist Millionen Jahre alt \u2013 und durchsichtig.",
     options: [
       { text: "Etwas Einzigartiges aus der Natur", next: "q_personal4_danzig" },
-      { text: "Etwas Handgemachtes vom lokalen Markt", next: "q_personal4_danzig" }
+      { text: "Ein Kleidungsstück vom vintage shopping", next: "q_personal4_danzig" }
     ]
   },
 
@@ -625,7 +617,7 @@ function render(nodeId) {
         '</div>' +
         '<div class="intro-sign">Dein Julius</div>' +
         '<div style="margin-top:28px" class="buttons">' +
-          '<button class="btn" onclick="render(\'start\')">Los geht\'s! \ud83c\udf89</button>' +
+          '<button class="btn" onclick="render(\'q_personal1\')">Los geht\'s! \ud83c\udf89</button>' +
         '</div>' +
       '</div>';
     slideTransition(html);
