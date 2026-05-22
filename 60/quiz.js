@@ -13,6 +13,7 @@
     scores: {},
     phase: 'loading',
     currentGameId: null,
+    playerHistory: [],
 
     viewerLastQid: null,
     viewerLastPhase: null,
@@ -22,7 +23,7 @@
     currentVoteQid: null
   };
 
-  var app, bg, voteBar;
+  var app, bg, voteBar, voteSidePanel;
 
   // ─── Init ───────────────────────────────────────────────
 
@@ -30,6 +31,7 @@
     app = document.getElementById('app');
     bg = document.getElementById('bg');
     voteBar = document.getElementById('vote-bar');
+    voteSidePanel = document.getElementById('vote-side-panel');
     createParticles();
     loadConfig()
       .then(bootstrapRole)
@@ -168,6 +170,7 @@
     var keys = Object.keys(state.config.destinations);
     for (var i = 0; i < keys.length; i++) state.scores[keys[i]] = 0;
     state.questionIndex = 0;
+    state.playerHistory = [];
   }
 
   function renderIntro() {
@@ -247,15 +250,45 @@
         progressPct: pct,
         stepLabel: 'Frage ' + stepNum + ' von ' + total,
         mode: 'player',
+        showBack: state.playerHistory.length > 0,
+        onBack: handlePlayerBack,
         onAnswer: function (option) { handlePlayerAnswer(q, option); }
       });
     });
   }
 
   function handlePlayerAnswer(question, option) {
+    state.playerHistory.push({
+      questionId: question.id,
+      optionId: option.id,
+      points: option.points || {},
+      wasTiebreaker: false
+    });
     addPoints(option.points);
     state.questionIndex += 1;
     renderQuestion();
+  }
+
+  function handlePlayerBack() {
+    if (state.playerHistory.length === 0) return;
+    var last = state.playerHistory.pop();
+    subtractPoints(last.points);
+    if (last.wasTiebreaker) {
+      renderTiebreakerPlayer();
+    } else {
+      state.questionIndex = Math.max(0, state.questionIndex - 1);
+      renderQuestion();
+    }
+  }
+
+  function subtractPoints(points) {
+    if (!points) return;
+    var keys = Object.keys(points);
+    for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      if (state.scores[key] == null) state.scores[key] = 0;
+      state.scores[key] -= points[key];
+    }
   }
 
   function addPoints(points) {
@@ -304,7 +337,17 @@
         progressPct: 100,
         stepLabel: 'Stichfrage',
         mode: 'player',
-        onAnswer: function (option) { playerRevealSequence(option.winner); }
+        showBack: state.playerHistory.length > 0,
+        onBack: handlePlayerBack,
+        onAnswer: function (option) {
+          state.playerHistory.push({
+            questionId: tb.id,
+            optionId: option.id,
+            points: {},
+            wasTiebreaker: true
+          });
+          playerRevealSequence(option.winner);
+        }
       });
     });
   }
@@ -425,11 +468,17 @@
         mode: 'viewer',
         votedOptionId: chosenOptionId,
         onAnswer: function (option) {
-          if (chosenOptionId) return;
+          if (chosenOptionId === option.id) return;
           if (!window.Realtime) return;
-          window.Realtime.castVote(qid, option.id).then(function (ok) {
-            if (!ok) return;
-            try { localStorage.setItem(voteKey, option.id); } catch (_) {}
+          var previous = chosenOptionId;
+          try { localStorage.setItem(voteKey, option.id); } catch (_) {}
+          renderViewerQuestion(qid, isTiebreaker, gameId);
+          window.Realtime.castVote(qid, option.id, previous).then(function (ok) {
+            if (ok) return;
+            try {
+              if (previous) localStorage.setItem(voteKey, previous);
+              else localStorage.removeItem(voteKey);
+            } catch (_) {}
             renderViewerQuestion(qid, isTiebreaker, gameId);
           });
         }
@@ -450,18 +499,26 @@
       cls: 'progress',
       children: [el('div', { cls: 'progress-bar', attrs: { style: 'width:' + opts.progressPct + '%' } })]
     }));
+
+    if (opts.showBack && opts.onBack) {
+      children.push(el('button', {
+        cls: 'back-btn',
+        text: '←',
+        attrs: { 'aria-label': 'Zurueck zur vorherigen Frage', 'title': 'Zurueck' },
+        on: { click: opts.onBack }
+      }));
+    }
+
     children.push(el('h2', { text: opts.stepLabel }));
     children.push(el('div', { cls: 'question', text: q.question }));
     if (q.hint) children.push(el('div', { cls: 'hint', text: q.hint }));
 
     var votedId = opts.votedOptionId || null;
-    var locked = opts.mode === 'viewer' && !!votedId;
 
     var buttonNodes = q.options.map(function (option) {
       return buildOptionButton(q, option, opts.onAnswer, {
         mode: opts.mode,
-        voted: votedId === option.id,
-        locked: locked
+        voted: votedId === option.id
       });
     });
 
@@ -478,7 +535,9 @@
     if (opts.mode === 'viewer') {
       children.push(el('div', {
         cls: 'viewer-note',
-        text: locked ? 'Danke fuers Voten! Live-Ergebnisse siehst du unten.' : 'Du bist Gast — waehle deine Stimme.'
+        text: votedId
+          ? 'Du kannst deine Stimme aendern, solange diese Frage laeuft.'
+          : 'Du bist Gast — waehle deine Stimme.'
       }));
     }
 
@@ -496,9 +555,8 @@
     var cls = 'btn';
     if (option.image) cls += ' btn--image';
     if (ctx.voted) cls += ' btn--voted';
-    if (ctx.locked && !ctx.voted) cls += ' btn--locked';
 
-    var clickHandler = ctx.locked ? null : { click: function () { onAnswer(option); } };
+    var clickHandler = { click: function () { onAnswer(option); } };
 
     if (option.image) {
       var children = [
@@ -511,7 +569,7 @@
       if (ctx.voted) children.push(el('span', { cls: 'btn__voted-flag', text: 'Deine Stimme' }));
       return el('button', {
         cls: cls,
-        attrs: ctx.locked ? Object.assign({ disabled: 'disabled' }, commonAttrs) : commonAttrs,
+        attrs: commonAttrs,
         on: clickHandler,
         children: children
       });
@@ -521,7 +579,7 @@
     if (ctx.voted) textChildren.push(el('span', { cls: 'btn__voted-flag', text: 'Deine Stimme' }));
     return el('button', {
       cls: cls,
-      attrs: ctx.locked ? Object.assign({ disabled: 'disabled' }, commonAttrs) : commonAttrs,
+      attrs: commonAttrs,
       on: clickHandler,
       children: textChildren
     });
@@ -596,18 +654,26 @@
   function switchVoteSubscription(qid) {
     if (state.unsubVotes) { state.unsubVotes(); state.unsubVotes = null; }
     state.currentVoteQid = qid;
-    if (!qid) { hideVoteBar(); return; }
+    if (!qid) { hideVoteDisplays(); return; }
     var enabled = state.config.meta && state.config.meta.voteBarEnabled === true;
-    if (!enabled || !window.Realtime || !window.Realtime.isReady()) { hideVoteBar(); return; }
-    state.unsubVotes = window.Realtime.onVotes(qid, function (counts) { renderVoteBar(qid, counts); });
+    if (!enabled || !window.Realtime || !window.Realtime.isReady()) { hideVoteDisplays(); return; }
+    state.unsubVotes = window.Realtime.onVotes(qid, function (counts) {
+      renderVoteBar(qid, counts);
+      renderVoteSidePanel(qid, counts);
+    });
+  }
+
+  function totalVotes(q, counts) {
+    var total = 0;
+    for (var i = 0; i < q.options.length; i++) total += counts[q.options[i].id] || 0;
+    return total;
   }
 
   function renderVoteBar(qid, counts) {
     if (!voteBar) return;
     var q = findQuestion(qid);
     if (!q) { hideVoteBar(); return; }
-    var total = 0;
-    for (var i = 0; i < q.options.length; i++) total += counts[q.options[i].id] || 0;
+    var total = totalVotes(q, counts);
     if (total === 0) { hideVoteBar(); return; }
 
     voteBar.hidden = false;
@@ -634,10 +700,64 @@
     voteBar.appendChild(rows);
   }
 
+  function renderVoteSidePanel(qid, counts) {
+    if (!voteSidePanel) return;
+    var q = findQuestion(qid);
+    if (!q) { hideVoteSidePanel(); return; }
+    var total = totalVotes(q, counts);
+    if (total === 0) { hideVoteSidePanel(); return; }
+
+    voteSidePanel.hidden = false;
+    voteSidePanel.innerHTML = '';
+    voteSidePanel.appendChild(el('div', { cls: 'vote-side-panel__title', text: 'Live-Voting' }));
+    voteSidePanel.appendChild(el('div', {
+      cls: 'vote-side-panel__total',
+      text: total + (total === 1 ? ' Stimme' : ' Stimmen')
+    }));
+
+    var options = el('div', { cls: 'vote-side-panel__options' });
+    q.options.forEach(function (opt) {
+      var count = counts[opt.id] || 0;
+      var pct = total > 0 ? Math.round((count / total) * 100) : 0;
+      options.appendChild(el('div', {
+        cls: 'vote-side-panel__option',
+        children: [
+          el('div', {
+            cls: 'vote-side-panel__row',
+            children: [
+              el('span', { cls: 'vote-side-panel__id', text: (opt.id || '').toUpperCase() }),
+              el('span', { cls: 'vote-side-panel__pct', text: pct + '%' })
+            ]
+          }),
+          el('div', {
+            cls: 'vote-side-panel__bar',
+            children: [el('div', { cls: 'vote-side-panel__fill', attrs: { style: 'width:' + pct + '%' } })]
+          }),
+          el('div', {
+            cls: 'vote-side-panel__count',
+            text: count + (count === 1 ? ' Stimme' : ' Stimmen')
+          })
+        ]
+      }));
+    });
+    voteSidePanel.appendChild(options);
+  }
+
   function hideVoteBar() {
     if (!voteBar) return;
     voteBar.hidden = true;
     voteBar.innerHTML = '';
+  }
+
+  function hideVoteSidePanel() {
+    if (!voteSidePanel) return;
+    voteSidePanel.hidden = true;
+    voteSidePanel.innerHTML = '';
+  }
+
+  function hideVoteDisplays() {
+    hideVoteBar();
+    hideVoteSidePanel();
   }
 
   // ─── Helpers ────────────────────────────────────────────

@@ -390,6 +390,145 @@ body:has(.vote-bar:not([hidden])) #app {
   padding-bottom: 80px;
 }
 
+.vote-side-panel {
+  display: none;
+}
+
+@media (min-width: 1100px) {
+  body:has(.vote-side-panel:not([hidden])) {
+    padding-right: 380px;
+    padding-bottom: 0;
+  }
+  body:has(.vote-side-panel:not([hidden])) .vote-bar {
+    display: none;
+  }
+  body:has(.vote-side-panel:not([hidden])) #app {
+    padding-bottom: 0;
+  }
+  .vote-side-panel:not([hidden]) {
+    display: block;
+    position: fixed;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
+    background: rgba(255, 248, 235, 0.82);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 22px;
+    padding: 22px 22px 24px;
+    box-shadow: 0 22px 60px rgba(60, 30, 10, 0.25);
+    color: #3a2f1f;
+    z-index: 4;
+    animation: slideInRight 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translate(40px, -50%) scale(0.97); }
+  to   { opacity: 1; transform: translate(0,    -50%) scale(1); }
+}
+
+.vote-side-panel__title {
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #b18540;
+  text-align: center;
+}
+.vote-side-panel__total {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2a1f0f;
+  margin-top: 2px;
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
+}
+.vote-side-panel__options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.vote-side-panel__option {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vote-side-panel__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.vote-side-panel__id {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: rgba(177, 133, 64, 0.22);
+  color: #2a1f0f;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.vote-side-panel__pct {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #2a1f0f;
+  font-variant-numeric: tabular-nums;
+}
+.vote-side-panel__bar {
+  height: 10px;
+  background: rgba(177, 133, 64, 0.18);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.vote-side-panel__fill {
+  height: 100%;
+  background: linear-gradient(90deg, #e8c074, #d97448);
+  border-radius: 5px;
+  transition: width 0.6s ease;
+}
+.vote-side-panel__count {
+  font-size: 0.82rem;
+  color: #6a553a;
+  font-variant-numeric: tabular-nums;
+}
+
+.back-btn {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(177, 133, 64, 0.35);
+  background: rgba(177, 133, 64, 0.12);
+  color: #b18540;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+.back-btn:hover {
+  background: rgba(177, 133, 64, 0.28);
+  color: #2a1f0f;
+  border-color: #b18540;
+  transform: translateX(-2px);
+}
+.card .question { margin-top: 6px; }
+
 .role-prompt .buttons {
   margin-top: 20px;
 }
@@ -443,16 +582,6 @@ body:has(.vote-bar:not([hidden])) #app {
 }
 .btn--voted:hover {
   transform: none !important;
-}
-.btn--locked {
-  opacity: 0.55;
-  cursor: not-allowed !important;
-}
-.btn--locked:hover {
-  background: rgba(255, 255, 255, 0.55) !important;
-  border-color: rgba(177, 133, 64, 0.45) !important;
-  transform: none !important;
-  box-shadow: none !important;
 }
 .btn__voted-flag {
   display: inline-block;

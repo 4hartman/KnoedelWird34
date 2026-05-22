@@ -100,12 +100,20 @@
     return function () { ref.off('value', handler); };
   }
 
-  function castVote(questionId, optionId) {
+  function castVote(questionId, optionId, previousOptionId) {
     if (!ready) return Promise.resolve(false);
-    var ref = votesRef.child(questionId).child(optionId);
-    return ref.transaction(function (current) {
-      return (typeof current === 'number' ? current : 0) + 1;
-    })
+    var ops = [];
+    if (previousOptionId && previousOptionId !== optionId) {
+      var prevRef = votesRef.child(questionId).child(previousOptionId);
+      ops.push(prevRef.transaction(function (c) {
+        return Math.max(0, (typeof c === 'number' ? c : 0) - 1);
+      }));
+    }
+    var newRef = votesRef.child(questionId).child(optionId);
+    ops.push(newRef.transaction(function (c) {
+      return (typeof c === 'number' ? c : 0) + 1;
+    }));
+    return Promise.all(ops)
       .then(function () { return true; })
       .catch(function (err) {
         console.warn('[realtime] castVote failed', err);
