@@ -1,0 +1,143 @@
+{
+  "_README": {
+    "1_how_to_edit": "Diese Datei steuert das gesamte Quiz. Texte, Punkte und Antworten kannst du frei aendern. Achte nur darauf, dass Anfuehrungszeichen und Kommas stehen bleiben wie im Beispiel.",
+    "2_questions": "Jede Frage hat eine 'id', den Text 'question' und 'options'. Optionen haben 'id', 'text' und optional 'points'.",
+    "3_points": "In 'points' steht, wie viele Punkte das Ziel bekommt: z.B. {\"corsica\": 1}. Mehrere Ziele moeglich: {\"corsica\": 2, \"denmark\": 0}. Leer lassen ({}) oder ganz weglassen = Spass-Frage ohne Punkte.",
+    "4_three_options": "Du kannst 2 oder 3 Antworten pro Frage haben. Bei 3 Antworten kann eine z.B. ohne Punkte sein (\"egal/keine Lust auf Entscheidung\").",
+    "5_tiebreaker": "Die 'tiebreaker' Frage wird nur gestellt, wenn am Ende Gleichstand herrscht. Jede ihrer Antworten muss 'winner' setzen (corsica oder denmark).",
+    "6_destinations": "Unter 'destinations' kannst du Beschreibung, Emoji, Tagline und Details des Reveal-Bildschirms anpassen.",
+    "7_intro": "Unter 'intro' steht der Begruessungstext. '{recipient}' wird durch 'meta.recipient' ersetzt.",
+    "8_recipient": "In 'meta.recipient' den Namen des Geburtstagskindes eintragen.",
+    "9_images": "Eine Option kann statt (oder zusaetzlich zu) 'text' ein 'image' haben. Lege das Bild in den Ordner 'images/' und schreibe den Pfad rein, z.B. \"image\": \"images/mein-bild.jpg\". Optional: 'alt' (Beschreibung fuer Screenreader). Wenn ALLE Optionen einer Frage ein Bild haben, werden sie nebeneinander angezeigt. Mit zusaetzlichem 'text' bekommst du eine Bildunterschrift."
+  },
+
+  "meta": {
+    "recipient": "Jubilar*in",
+    "occasion": "60. Geburtstag",
+    "voteBarEnabled": false
+  },
+
+  "intro": {
+    "greeting": "Alles Gute zum 60., {recipient}!",
+    "subtitle": "Bevor wir das Geheimnis lueften — ein paar Fragen. Bauchgefuehl reicht!",
+    "buttonText": "Los geht's"
+  },
+
+  "destinations": {
+    "corsica": {
+      "label": "Korsika",
+      "emoji": "🏝️🌊☀️",
+      "title": "Ueberraschung!",
+      "tagline": "Sonne, Maquis-Duft und azurblaues Meer",
+      "details": "Pack die Wanderschuhe UND die Badehose — auf dich warten kristallklare Buchten, duftende Pinienwaelder und Sonnenuntergaenge ueber dem Mittelmeer. Buon viaggio!",
+      "bgClass": "reveal-corsica"
+    },
+    "denmark": {
+      "label": "Daenemark",
+      "emoji": "🌊🏖️🚲",
+      "title": "Ueberraschung!",
+      "tagline": "Duenen, Hygge und Nordsee-Wind",
+      "details": "Ein gemuetliches Ferienhaus an der Kueste, lange Strandspaziergaenge im weichen Licht, Smoerrebroed am Hafen. Velkommen!",
+      "bgClass": "reveal-denmark"
+    }
+  },
+
+  "questions": [
+    {
+      "id": "q1",
+      "question": "Was klingt nach perfektem Urlaubsmorgen?",
+      "hint": "Bauchgefuehl reicht!",
+      "options": [
+        { "id": "a", "text": "Espresso auf einer sonnigen Terrasse, Zikaden im Hintergrund", "points": { "corsica": 1 } },
+        { "id": "b", "text": "Kaffee mit Wind in den Haaren am weiten Sandstrand", "points": { "denmark": 1 } }
+      ]
+    },
+    {
+      "id": "q2",
+      "question": "Welches Mittagessen klingt verlockender?",
+      "options": [
+        { "id": "a", "text": "Frische Meeresfruechte und ein Glas Wein", "points": { "corsica": 2 } },
+        { "id": "b", "text": "Smoerrebroed mit Hering und ein kuehles Bier", "points": { "denmark": 2 } },
+        { "id": "c", "text": "Egal — Hauptsache draussen und in guter Gesellschaft", "points": {} }
+      ]
+    },
+    {
+      "id": "q3",
+      "question": "Nur aus Spass: Sandburg oder Kieselstein-Turm?",
+      "options": [
+        { "id": "a", "text": "Sandburg, klar — mit Graben und Wimpel!" },
+        { "id": "b", "text": "Kieselstein-Turm, kunstvoll und meditativ." }
+      ]
+    },
+    {
+      "id": "q4",
+      "question": "Welche Landschaft laesst dein Herz huepfen?",
+      "options": [
+        { "id": "a", "text": "Steile Kuestenklippen ueber tuerkisem Wasser", "points": { "corsica": 2 } },
+        { "id": "b", "text": "Endlose Duenen und ein Meer aus Strandhafer", "points": { "denmark": 2 } },
+        { "id": "c", "text": "Bunte Wildblumenwiesen — die gibt's ueberall", "points": { "corsica": 1, "denmark": 1 } }
+      ]
+    },
+    {
+      "id": "q5",
+      "question": "Welches Bild zieht dich mehr an?",
+      "hint": "Tipp: 'image' im JSON ersetzt den Button-Text durch ein Bild.",
+      "options": [
+        { "id": "a", "image": "images/corsica-placeholder.svg", "alt": "Sonne ueber dem Mittelmeer", "text": "Mittagssonne am Felsenkap", "points": { "corsica": 1 } },
+        { "id": "b", "image": "images/denmark-placeholder.svg", "alt": "Duenen mit Nordsee im Hintergrund",  "text": "Duenen und Nordseewind",     "points": { "denmark": 1 } }
+      ]
+    },
+    {
+      "id": "q6",
+      "question": "Abends — was klingt besser?",
+      "options": [
+        { "id": "a", "text": "Auf einer Dorfplatz-Bank Pastis schluerfen", "points": { "corsica": 1 } },
+        { "id": "b", "text": "Am Hafen sitzen, Lichterketten im Wind", "points": { "denmark": 1 } },
+        { "id": "c", "text": "Frueh ins Bett — der Tag war schoen genug", "points": {} }
+      ]
+    },
+    {
+      "id": "q7",
+      "question": "Spass-Frage: Welche Augenfarbe hat der Reisefuehrer (wenn du dir einen ausdenkst)?",
+      "options": [
+        { "id": "a", "text": "Tiefblau wie das Meer" },
+        { "id": "b", "text": "Sonnengoldbraun" },
+        { "id": "c", "text": "Sage ich nicht — der ist scheu!" }
+      ]
+    },
+    {
+      "id": "q8",
+      "question": "Welches Souvenir nimmst du mit nach Hause?",
+      "options": [
+        { "id": "a", "text": "Olivenoel und korsischen Honig", "points": { "corsica": 2 } },
+        { "id": "b", "text": "Daenisches Designstueck und Lakritz", "points": { "denmark": 2 } }
+      ]
+    },
+    {
+      "id": "q9",
+      "question": "Welches Wetter macht dir wirklich gute Laune?",
+      "options": [
+        { "id": "a", "text": "30 Grad und ein lauer Wind", "points": { "corsica": 1 } },
+        { "id": "b", "text": "22 Grad, frische Brise, gelegentliche Wolken", "points": { "denmark": 1 } }
+      ]
+    },
+    {
+      "id": "q10",
+      "question": "Letzte Frage: Welches Geraeusch entspannt dich am meisten?",
+      "options": [
+        { "id": "a", "text": "Wellen, die an Felsen klatschen", "points": { "corsica": 1 } },
+        { "id": "b", "text": "Wind, der durchs Duenengras streicht", "points": { "denmark": 1 } },
+        { "id": "c", "text": "Stille — einfach gar nichts.", "points": {} }
+      ]
+    }
+  ],
+
+  "tiebreaker": {
+    "id": "tb",
+    "question": "Unentschieden! Letzte Entscheidung: Welcher Geruch lockt dich mehr?",
+    "options": [
+      { "id": "a", "text": "Pinienwald in der Mittagshitze", "winner": "corsica" },
+      { "id": "b", "text": "Salziger Nordseewind am Morgen", "winner": "denmark" }
+    ]
+  }
+}
