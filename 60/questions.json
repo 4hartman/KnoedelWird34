@@ -8,13 +8,14 @@
     "6_destinations": "Unter 'destinations' kannst du Beschreibung, Emoji, Tagline und Details des Reveal-Bildschirms anpassen.",
     "7_intro": "Unter 'intro' steht der Begruessungstext. '{recipient}' wird durch 'meta.recipient' ersetzt.",
     "8_recipient": "In 'meta.recipient' den Namen des Geburtstagskindes eintragen.",
-    "9_images": "Eine Option kann statt (oder zusaetzlich zu) 'text' ein 'image' haben. Lege das Bild in den Ordner 'images/' und schreibe den Pfad rein, z.B. \"image\": \"images/mein-bild.jpg\". Optional: 'alt' (Beschreibung fuer Screenreader). Wenn ALLE Optionen einer Frage ein Bild haben, werden sie nebeneinander angezeigt. Mit zusaetzlichem 'text' bekommst du eine Bildunterschrift."
+    "9_images": "Eine Option kann statt (oder zusaetzlich zu) 'text' ein 'image' haben. Lege das Bild in den Ordner 'images/' und schreibe den Pfad rein, z.B. \"image\": \"images/mein-bild.jpg\". Optional: 'alt' (Beschreibung fuer Screenreader). Wenn ALLE Optionen einer Frage ein Bild haben, werden sie nebeneinander angezeigt. Mit zusaetzlichem 'text' bekommst du eine Bildunterschrift.",
+    "10_voting": "Live-Voting: 'voteBarEnabled' auf true setzen aktiviert die Voting-Leiste am unteren Bildschirmrand und das Voting fuer Gaeste. Setup in 60/firebase-config.js. Bei false (oder fehlender Firebase-Konfiguration) laeuft das Quiz weiter wie zuvor, nur ohne Gast-Funktion."
   },
 
   "meta": {
     "recipient": "Jubilar*in",
     "occasion": "60. Geburtstag",
-    "voteBarEnabled": false
+    "voteBarEnabled": true
   },
 
   "intro": {
