@@ -13,6 +13,7 @@ import { QuestionsTab } from './tabs/QuestionsTab';
 import { ThemeTab } from './tabs/ThemeTab';
 import { PublishTab } from './tabs/PublishTab';
 import { PreviewPane } from './PreviewPane';
+import { CollaboratorsModal } from './CollaboratorsModal';
 import { useAuth } from '../auth/AuthContext';
 import { auth } from '../firebase';
 
@@ -66,6 +67,7 @@ function EditorBody({
 }) {
   const { user, logout } = useAuth();
   const [tab, setTab] = useState<TabKey>('general');
+  const [sharing, setSharing] = useState(false);
   const { config, setConfig, theme, setTheme, status, error, save } = useProjectDraft(
     projectId,
     project.config,
@@ -79,8 +81,19 @@ function EditorBody({
         <button className="link-btn" onClick={onBack}>← Zurück</button>
         <h1>{project.title}</h1>
         <SaveBadge status={status} />
+        <button className="link-btn" onClick={() => setSharing(true)}>Teilen</button>
         <button className="btn-inline" onClick={() => void save()}>Speichern</button>
       </header>
+
+      {sharing && (
+        <CollaboratorsModal
+          projectId={projectId}
+          ownerUid={project.ownerUid}
+          initialEmails={project.editorEmails ?? []}
+          isOwner={uid === project.ownerUid}
+          onClose={() => setSharing(false)}
+        />
+      )}
 
       {status === 'error' && error && (
         <div className="error save-error">

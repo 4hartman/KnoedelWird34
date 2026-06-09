@@ -28,7 +28,7 @@ export function ProjectList() {
     if (!user) return;
     setLoading(true);
     try {
-      setProjects(await listProjects(user.uid));
+      setProjects(await listProjects(user.uid, user.email));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Laden fehlgeschlagen.');
     } finally {
@@ -86,26 +86,34 @@ export function ProjectList() {
             <span>Neues Geschenk</span>
           </button>
 
-          {projects.map((p) => (
-            <div className="project-card" key={p.id}>
-              <button
-                className="card-open"
-                onClick={() => navigate(`/project/${p.id}`)}
-              >
-                <span className="card-title">{p.title}</span>
-                <span className={`badge ${p.published ? 'live' : 'draft'}`}>
-                  {p.published ? 'Veröffentlicht' : 'Entwurf'}
-                </span>
-              </button>
-              <div className="card-actions">
-                <button onClick={() => handleRename(p)}>Umbenennen</button>
-                <button onClick={() => handleDuplicate(p)}>Duplizieren</button>
-                <button className="danger" onClick={() => handleDelete(p)}>
-                  Löschen
+          {projects.map((p) => {
+            const owned = p.ownerUid === user?.uid;
+            return (
+              <div className="project-card" key={p.id}>
+                <button
+                  className="card-open"
+                  onClick={() => navigate(`/project/${p.id}`)}
+                >
+                  <span className="card-title">{p.title}</span>
+                  <span className="badges">
+                    <span className={`badge ${p.published ? 'live' : 'draft'}`}>
+                      {p.published ? 'Veröffentlicht' : 'Entwurf'}
+                    </span>
+                    {!owned && <span className="badge shared">Geteilt</span>}
+                  </span>
                 </button>
+                <div className="card-actions">
+                  <button onClick={() => handleRename(p)}>Umbenennen</button>
+                  {owned && <button onClick={() => handleDuplicate(p)}>Duplizieren</button>}
+                  {owned && (
+                    <button className="danger" onClick={() => handleDelete(p)}>
+                      Löschen
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

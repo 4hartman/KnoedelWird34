@@ -13,6 +13,8 @@ import {
   deleteDoc,
   query,
   where,
+  arrayUnion,
+  arrayRemove,
   serverTimestamp,
   type Timestamp,
 } from 'firebase/firestore';
@@ -22,14 +24,23 @@ import { templateByKey } from '../lib/templates';
 
 const COL = 'projects';
 
-export async function listProjects(ownerUid: string): Promise<Project[]> {
-  const q = query(collection(db, COL), where('ownerUid', '==', ownerUid));
-  const snap = await getDocs(q);
-  const projects = snap.docs.map((d) => ({
-    id: d.id,
-    ...(d.data() as Omit<Project, 'id'>),
-  }));
-  return projects.sort((a, b) => millis(b.updatedAt) - millis(a.updatedAt));
+// Returns the user's own projects plus any shared with their email, deduped.
+export async function listProjects(
+  ownerUid: string,
+  email?: string | null,
+): Promise<Project[]> {
+  const queries = [getDocs(query(collection(db, COL), where('ownerUid', '==', ownerUid)))];
+  if (email) {
+    queries.push(
+      getDocs(query(collection(db, COL), where('editorEmails', 'array-contains', email.toLowerCase()))),
+    );
+  }
+  const snaps = await Promise.all(queries);
+  const byId = new Map<string, Project>();
+  snaps.forEach((snap) =>
+    snap.docs.forEach((d) => byId.set(d.id, { id: d.id, ...(d.data() as Omit<Project, 'id'>) })),
+  );
+  return [...byId.values()].sort((a, b) => millis(b.updatedAt) - millis(a.updatedAt));
 }
 
 function millis(ts: unknown): number {
@@ -53,6 +64,7 @@ export async function createProject(
   const tpl = templateByKey(templateKey);
   const ref = await addDoc(collection(db, COL), {
     ownerUid,
+    editorEmails: [],
     title,
     published: false,
     theme: tpl.theme,
@@ -61,6 +73,22 @@ export async function createProject(
     updatedAt: serverTimestamp(),
   });
   return ref.id;
+}
+
+// Collaborator management (owner only — enforced by security rules). Emails are
+// stored lowercased to match Firebase Auth's token email.
+export async function addCollaborator(id: string, email: string): Promise<void> {
+  await updateDoc(doc(db, COL, id), {
+    editorEmails: arrayUnion(email.trim().toLowerCase()),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function removeCollaborator(id: string, email: string): Promise<void> {
+  await updateDoc(doc(db, COL, id), {
+    editorEmails: arrayRemove(email),
+    updatedAt: serverTimestamp(),
+  });
 }
 
 export async function saveProjectConfig(
@@ -86,6 +114,7 @@ export async function deleteProject(id: string): Promise<void> {
 export async function duplicateProject(source: Project): Promise<string> {
   const ref = await addDoc(collection(db, COL), {
     ownerUid: source.ownerUid,
+    editorEmails: [],
     title: `${source.title} (Kopie)`,
     published: false,
     theme: source.theme,

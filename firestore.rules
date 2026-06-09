@@ -9,12 +9,28 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     match /projects/{projectId} {
-      allow read: if resource.data.published == true
-        || (request.auth != null && request.auth.uid == resource.data.ownerUid);
+      function isOwner() {
+        return request.auth != null && request.auth.uid == resource.data.ownerUid;
+      }
+      // A collaborator is anyone signed in whose email is on the project's
+      // editorEmails allowlist (set by the owner). Gives full content access.
+      function isCollaborator() {
+        return request.auth != null
+          && request.auth.token.email != null
+          && request.auth.token.email in resource.data.get('editorEmails', []);
+      }
+      // Collaborators may edit content but must not change ownership or the
+      // collaborator list — only the owner manages those.
+      function keepsOwnershipFields() {
+        return request.resource.data.ownerUid == resource.data.ownerUid
+          && request.resource.data.get('editorEmails', []) == resource.data.get('editorEmails', []);
+      }
+
+      allow read: if resource.data.published == true || isOwner() || isCollaborator();
       allow create: if request.auth != null
         && request.auth.uid == request.resource.data.ownerUid;
-      allow update, delete: if request.auth != null
-        && request.auth.uid == resource.data.ownerUid;
+      allow update: if isOwner() || (isCollaborator() && keepsOwnershipFields());
+      allow delete: if isOwner();
     }
 
     match /slugs/{slug} {

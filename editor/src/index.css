@@ -172,6 +172,8 @@ button { font-family: inherit; cursor: pointer; }
 }
 .badge.draft { background: #efe6d2; color: #6b5d49; }
 .badge.live { background: #d6f0d8; color: #1d6b2a; }
+.badge.shared { background: #dce6f5; color: #2a4d8c; }
+.badges { display: flex; gap: 0.4rem; flex-wrap: wrap; }
 .card-actions {
   display: flex;
   gap: 0.5rem;
@@ -442,6 +444,26 @@ button { font-family: inherit; cursor: pointer; }
 .template-option.active { border-color: var(--primary); background: rgba(177, 133, 64, 0.08); }
 .template-option small { color: #6b5d49; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 1rem; align-items: center; }
+
+/* ─── Collaborators ───────────────────────── */
+.invite-row { display: flex; gap: 0.5rem; margin: 0.75rem 0; }
+.invite-row input {
+  flex: 1;
+  padding: 0.6rem;
+  border: 1px solid #d8cdb8;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+.collab-list { list-style: none; padding: 0; margin: 0.5rem 0 1rem; }
+.collab-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ece2cf;
+}
+.collab-list li:last-child { border-bottom: none; }
 
 /* ─── Publish ─────────────────────────────── */
 .validation { background: rgba(179, 38, 30, 0.06); border-radius: 12px; padding: 0.5rem 1rem; }

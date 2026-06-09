@@ -70,6 +70,7 @@ export interface ThemeConfig {
 export interface Project {
   id: string;
   ownerUid: string;
+  editorEmails?: string[];
   slug?: string;
   published: boolean;
   title: string;
