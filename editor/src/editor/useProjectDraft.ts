@@ -20,6 +20,7 @@ export function useProjectDraft(
   const [config, setConfig] = useState<QuizConfig>(initialConfig);
   const [theme, setTheme] = useState<ThemeConfig>(initialTheme);
   const [status, setStatus] = useState<SaveStatus>('idle');
+  const [error, setError] = useState('');
 
   const latest = useRef({ config, theme });
   latest.current = { config, theme };
@@ -33,8 +34,12 @@ export function useProjectDraft(
     setStatus('saving');
     try {
       await saveProjectConfig(projectId, latest.current.config, latest.current.theme);
+      setError('');
       setStatus('saved');
-    } catch {
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      setError(msg);
+      console.error('[save] failed:', e);
       setStatus('error');
     }
   }, [projectId]);
@@ -56,5 +61,5 @@ export function useProjectDraft(
     };
   }, [config, theme, persist]);
 
-  return { config, setConfig, theme, setTheme, status, save: persist };
+  return { config, setConfig, theme, setTheme, status, error, save: persist };
 }

@@ -5,6 +5,7 @@
 
 import type { ThemeConfig } from '../../types';
 import { ImageUpload } from '../ImageUpload';
+import { DEFAULT_THEME } from '../../lib/templates';
 
 interface Props {
   uid: string;
@@ -39,9 +40,21 @@ export function ThemeTab({ uid, projectId, theme, onChange }: Props) {
     onChange({ ...theme, palette: { ...theme.palette, [key]: value } });
   }
 
+  function resetToDefault() {
+    if (!window.confirm('Design auf Standard zurücksetzen?')) return;
+    onChange({ ...DEFAULT_THEME, palette: { ...DEFAULT_THEME.palette } });
+  }
+
+  const cardOpacity = theme.cardOpacity ?? 0.86;
+
   return (
     <div className="tab-panel">
-      <h2>Design</h2>
+      <div className="panel-head">
+        <h2>Design</h2>
+        <button className="link-btn" onClick={resetToDefault}>
+          Auf Standard zurücksetzen
+        </button>
+      </div>
 
       <h3>Farben</h3>
       <div className="palette-grid">
@@ -56,6 +69,17 @@ export function ThemeTab({ uid, projectId, theme, onChange }: Props) {
           </label>
         ))}
       </div>
+
+      <label className="field">
+        <span>Karten-Transparenz: {Math.round(cardOpacity * 100)}%</span>
+        <input
+          type="range"
+          min={0}
+          max={100}
+          value={Math.round(cardOpacity * 100)}
+          onChange={(e) => onChange({ ...theme, cardOpacity: Number(e.target.value) / 100 })}
+        />
+      </label>
 
       <h3>Hintergrund</h3>
       <div className="preset-grid">

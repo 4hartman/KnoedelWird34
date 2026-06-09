@@ -14,6 +14,7 @@ import { ThemeTab } from './tabs/ThemeTab';
 import { PublishTab } from './tabs/PublishTab';
 import { PreviewPane } from './PreviewPane';
 import { useAuth } from '../auth/AuthContext';
+import { auth } from '../firebase';
 
 type TabKey = 'general' | 'outcomes' | 'questions' | 'theme' | 'publish';
 
@@ -63,9 +64,9 @@ function EditorBody({
   project: Project;
   onBack: () => void;
 }) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [tab, setTab] = useState<TabKey>('general');
-  const { config, setConfig, theme, setTheme, status, save } = useProjectDraft(
+  const { config, setConfig, theme, setTheme, status, error, save } = useProjectDraft(
     projectId,
     project.config,
     project.theme,
@@ -80,6 +81,29 @@ function EditorBody({
         <SaveBadge status={status} />
         <button className="btn-inline" onClick={() => void save()}>Speichern</button>
       </header>
+
+      {status === 'error' && error && (
+        <div className="error save-error">
+          {!auth.currentUser ? (
+            <p>
+              Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.{' '}
+              <button className="link-btn" onClick={() => void logout()}>
+                Erneut anmelden
+              </button>
+            </p>
+          ) : (
+            <>
+              <p>Speichern fehlgeschlagen: {error}</p>
+              {uid !== project.ownerUid && (
+                <p className="muted">
+                  Dieses Projekt gehört einem anderen Konto. Angemeldet als{' '}
+                  <code>{uid}</code>, Eigentümer <code>{project.ownerUid}</code>.
+                </p>
+              )}
+            </>
+          )}
+        </div>
+      )}
 
       <div className="editor-layout">
         <div className="editor-col">

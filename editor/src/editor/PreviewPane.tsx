@@ -5,6 +5,7 @@
 // non-interactive; the real gift is the published runtime.
 
 import type { QuizConfig, ThemeConfig } from '../types';
+import { hexToRgba } from '../lib/color';
 
 interface Props {
   config: QuizConfig;
@@ -20,6 +21,8 @@ export function PreviewPane({ config, theme }: Props) {
     '--p-bg': bg,
     '--p-primary': theme.palette.primary,
     '--p-accent': theme.palette.accent,
+    '--p-text': theme.palette.text,
+    '--p-card': hexToRgba(theme.palette.card, theme.cardOpacity ?? 0.86),
     '--p-font': `'${theme.font}', sans-serif`,
     '--p-heading-font': `'${theme.headingFont ?? 'Playfair Display'}', serif`,
   } as React.CSSProperties;

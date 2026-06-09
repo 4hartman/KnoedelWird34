@@ -11,6 +11,8 @@
   --theme-bg: linear-gradient(135deg, #f3e3c9 0%, #e0a23c 45%, #cf6a45 100%);
   --theme-primary: #cf6a45;
   --theme-accent: #e0a23c;
+  --theme-text: #3a2f1f;
+  --theme-card: rgba(255, 248, 235, 0.86);
 }
 
 body {
@@ -21,7 +23,7 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  color: #3a2f1f;
+  color: var(--theme-text);
 }
 
 .bg {
@@ -50,7 +52,7 @@ body {
 #app { position: relative; max-width: 640px; width: 92%; margin: auto; padding: 24px 0 96px; }
 
 .card {
-  background: rgba(255, 248, 235, 0.78);
+  background: var(--theme-card);
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
   border: 1px solid rgba(255,255,255,0.55);
@@ -58,7 +60,7 @@ body {
   padding: 46px 38px;
   width: 100%;
   text-align: center;
-  color: #3a2f1f;
+  color: var(--theme-text);
   box-shadow: 0 22px 60px rgba(60, 30, 10, 0.25);
   position: relative;
 }
@@ -87,7 +89,7 @@ body {
   font-family: var(--theme-heading-font);
   font-size: 1.55rem; line-height: 1.4;
   font-weight: 600;
-  color: #2a1f0f;
+  color: var(--theme-text);
   margin-bottom: 28px;
 }
 
@@ -113,7 +115,7 @@ body {
   padding: 16px 28px;
   border: 2px solid rgba(177, 133, 64, 0.45);
   background: rgba(255, 255, 255, 0.55);
-  color: #2a1f0f;
+  color: var(--theme-text);
   border-radius: 60px;
   font-size: 1.02rem;
   font-family: var(--theme-font);
@@ -249,7 +251,7 @@ body {
   font-size: 2.6rem;
   line-height: 1.15;
   margin-bottom: 18px;
-  color: #2a1f0f;
+  color: var(--theme-text);
 }
 .intro-subtitle {
   font-size: 1.05rem;
@@ -288,7 +290,7 @@ body {
   font-size: 1.5rem;
   font-weight: 600;
   font-style: italic;
-  color: #2a1f0f;
+  color: var(--theme-text);
   animation: drumPulse 0.6s ease-in-out infinite;
 }
 .drumroll-dots::after {
@@ -455,7 +457,7 @@ body:has(.vote-bar:not([hidden])) #app {
   font-family: var(--theme-heading-font);
   font-size: 1.6rem;
   font-weight: 700;
-  color: #2a1f0f;
+  color: var(--theme-text);
   margin-top: 2px;
   margin-bottom: 18px;
   letter-spacing: 0.5px;
@@ -482,7 +484,7 @@ body:has(.vote-bar:not([hidden])) #app {
   width: 30px; height: 30px;
   border-radius: 50%;
   background: rgba(177, 133, 64, 0.22);
-  color: #2a1f0f;
+  color: var(--theme-text);
   font-weight: 700;
   font-size: 0.9rem;
 }
@@ -490,7 +492,7 @@ body:has(.vote-bar:not([hidden])) #app {
   font-family: var(--theme-heading-font);
   font-weight: 700;
   font-size: 1.4rem;
-  color: #2a1f0f;
+  color: var(--theme-text);
   font-variant-numeric: tabular-nums;
 }
 .vote-side-panel__bar {
@@ -533,7 +535,7 @@ body:has(.vote-bar:not([hidden])) #app {
 }
 .back-btn:hover {
   background: rgba(177, 133, 64, 0.28);
-  color: #2a1f0f;
+  color: var(--theme-text);
   border-color: #b18540;
   transform: translateX(-2px);
 }
@@ -585,7 +587,7 @@ body:has(.vote-bar:not([hidden])) #app {
 .btn--voted {
   background: linear-gradient(135deg, rgba(232, 192, 116, 0.85), rgba(217, 116, 72, 0.70)) !important;
   border-color: #b18540 !important;
-  color: #2a1f0f !important;
+  color: var(--theme-text) !important;
   box-shadow: 0 6px 22px rgba(177, 133, 64, 0.35);
   cursor: default !important;
   transform: none !important;

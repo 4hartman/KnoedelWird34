@@ -11,7 +11,7 @@ import {
   type ReactNode,
 } from 'react';
 import {
-  onAuthStateChanged,
+  onIdTokenChanged,
   signInWithPopup,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -36,7 +36,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    return onAuthStateChanged(auth, (u) => {
+    // onIdTokenChanged fires on sign-in, sign-out, AND token refresh/expiry, so a
+    // dead session flips `user` to null and the route guard sends the editor back
+    // to the login screen instead of leaving a stale, write-denied UI.
+    return onIdTokenChanged(auth, (u) => {
       setUser(u);
       setLoading(false);
     });

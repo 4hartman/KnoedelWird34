@@ -64,6 +64,7 @@ export interface ThemeConfig {
   backgroundImage?: string;
   font: string;
   headingFont: string;
+  cardOpacity: number;
 }
 
 export interface Project {

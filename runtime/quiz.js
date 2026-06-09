@@ -60,6 +60,12 @@
     if (theme.palette) {
       if (theme.palette.primary) root.setProperty('--theme-primary', theme.palette.primary);
       if (theme.palette.accent) root.setProperty('--theme-accent', theme.palette.accent);
+      if (theme.palette.text) root.setProperty('--theme-text', theme.palette.text);
+      if (theme.palette.card) {
+        var alpha = (typeof theme.cardOpacity === 'number') ? theme.cardOpacity : 0.86;
+        var rgba = hexToRgba(theme.palette.card, alpha);
+        if (rgba) root.setProperty('--theme-card', rgba);
+      }
     }
   }
 
@@ -71,6 +77,19 @@
     if (meta.occasion) parts.push(meta.occasion);
     if (meta.recipient) parts.push(meta.recipient);
     document.title = parts.length ? parts.join(' — ') : 'Ein Geschenk für dich';
+  }
+
+  // Converts a #rgb / #rrggbb hex color + alpha into an rgba() string, so the
+  // card colour can carry an adjustable transparency. Returns null if unparseable.
+  function hexToRgba(hex, alpha) {
+    if (!hex) return null;
+    var h = String(hex).replace('#', '');
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var r = parseInt(h.slice(0, 2), 16);
+    var g = parseInt(h.slice(2, 4), 16);
+    var b = parseInt(h.slice(4, 6), 16);
+    if (isNaN(r) || isNaN(g) || isNaN(b)) return null;
+    return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
   }
 
   // Resolves the gift slug from the URL. Published gifts are served at

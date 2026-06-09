@@ -16,6 +16,7 @@ export const DEFAULT_THEME: ThemeConfig = {
     'linear-gradient(135deg, #f3e3c9 0%, #e0a23c 45%, #cf6a45 100%)',
   font: 'Quicksand',
   headingFont: 'Playfair Display',
+  cardOpacity: 0.86,
 };
 
 let idCounter = 0;
