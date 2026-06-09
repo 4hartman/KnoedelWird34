@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Korsika - Sonne ueber dem Meer">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f9d976"/>
+      <stop offset="55%" stop-color="#f39f5a"/>
+      <stop offset="100%" stop-color="#d97448"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2e8bc0"/>
+      <stop offset="100%" stop-color="#0a4d8c"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#sky)"/>
+  <circle cx="280" cy="120" r="48" fill="#fff8eb" opacity="0.95"/>
+  <circle cx="280" cy="120" r="64" fill="#fff8eb" opacity="0.25"/>
+  <path d="M0,200 Q100,180 200,200 T400,200 L400,300 L0,300 Z" fill="url(#sea)"/>
+  <path d="M0,215 Q90,205 200,215 T400,215" stroke="#fff8eb" stroke-opacity="0.45" stroke-width="2" fill="none"/>
+  <path d="M0,230 Q90,222 200,230 T400,230" stroke="#fff8eb" stroke-opacity="0.30" stroke-width="2" fill="none"/>
+  <path d="M40,200 L60,170 L80,200 Z" fill="#3a2f1f" opacity="0.5"/>
+  <path d="M70,200 L110,160 L150,200 Z" fill="#3a2f1f" opacity="0.6"/>
+  <path d="M340,200 L370,170 L400,200 L400,210 L340,210 Z" fill="#3a2f1f" opacity="0.55"/>
+</svg>

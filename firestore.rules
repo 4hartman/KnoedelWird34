@@ -1,0 +1,25 @@
+rules_version = '2';
+
+// Security rules for the gift-quiz platform.
+// - A project is publicly readable only once it is published; otherwise only
+//   its owner can read it. Writes are always owner-only.
+// - The `slugs` collection maps a public slug to its projectId so the runtime
+//   can resolve /g/{slug} -> project. Slug claims require sign-in.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /projects/{projectId} {
+      allow read: if resource.data.published == true
+        || (request.auth != null && request.auth.uid == resource.data.ownerUid);
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.ownerUid;
+      allow update, delete: if request.auth != null
+        && request.auth.uid == resource.data.ownerUid;
+    }
+
+    match /slugs/{slug} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}

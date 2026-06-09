@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Daenemark - Duenen und Nordsee">
+  <defs>
+    <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#cfe2eb"/>
+      <stop offset="100%" stop-color="#7aa4b8"/>
+    </linearGradient>
+    <linearGradient id="sea2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#406b85"/>
+      <stop offset="100%" stop-color="#1f3a52"/>
+    </linearGradient>
+    <linearGradient id="dune" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e9d39a"/>
+      <stop offset="100%" stop-color="#b89765"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#sky2)"/>
+  <ellipse cx="120" cy="80" rx="60" ry="14" fill="#fff" opacity="0.55"/>
+  <ellipse cx="280" cy="60" rx="40" ry="9" fill="#fff" opacity="0.45"/>
+  <path d="M0,170 Q120,150 220,170 T400,170 L400,210 L0,210 Z" fill="url(#sea2)"/>
+  <path d="M0,180 Q120,172 220,180 T400,180" stroke="#fff" stroke-opacity="0.4" stroke-width="2" fill="none"/>
+  <path d="M0,195 Q120,188 220,195 T400,195" stroke="#fff" stroke-opacity="0.25" stroke-width="2" fill="none"/>
+  <path d="M0,300 L0,210 Q90,200 160,220 Q230,240 320,225 Q380,215 400,225 L400,300 Z" fill="url(#dune)"/>
+  <g stroke="#3a2f1f" stroke-opacity="0.45" stroke-width="1.5" stroke-linecap="round">
+    <line x1="60"  y1="248" x2="58"  y2="232"/>
+    <line x1="68"  y1="252" x2="66"  y2="236"/>
+    <line x1="76"  y1="250" x2="74"  y2="234"/>
+    <line x1="220" y1="252" x2="218" y2="234"/>
+    <line x1="228" y1="256" x2="226" y2="238"/>
+    <line x1="236" y1="252" x2="234" y2="234"/>
+    <line x1="320" y1="245" x2="318" y2="228"/>
+    <line x1="328" y1="248" x2="326" y2="230"/>
+  </g>
+  <g transform="translate(260,205)">
+    <path d="M0,0 L0,-26 L18,-6 Z" fill="#c8102e"/>
+    <line x1="0" y1="0" x2="0" y2="-30" stroke="#3a2f1f" stroke-width="1.5"/>
+    <path d="M-12,0 L12,0 L8,6 L-8,6 Z" fill="#3a2f1f"/>
+  </g>
+</svg>

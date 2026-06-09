@@ -1,0 +1,11 @@
+# Build artifacts
+/public/
+editor/dist/
+editor/node_modules/
+
+# Logs / OS
+.DS_Store
+*.log
+
+# Firebase
+.firebase/
