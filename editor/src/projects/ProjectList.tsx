@@ -14,6 +14,7 @@ import {
   duplicateProject,
 } from './projectsApi';
 import { NewProjectModal } from './NewProjectModal';
+import { Logo } from '../brand/Logo';
 
 export function ProjectList() {
   const { user, logout } = useAuth();
@@ -66,7 +67,7 @@ export function ProjectList() {
   return (
     <div className="page">
       <header className="app-header">
-        <h1>🎁 Meine Geschenke</h1>
+        <Logo size={36} />
         <div className="header-actions">
           <span className="muted">{user?.email ?? user?.displayName}</span>
           <button className="link-btn" onClick={() => logout()}>

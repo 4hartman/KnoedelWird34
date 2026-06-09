@@ -7,13 +7,13 @@ import type { QuizConfig, ThemeConfig } from '../types';
 
 export const DEFAULT_THEME: ThemeConfig = {
   palette: {
-    primary: '#b18540',
-    accent: '#d97448',
-    text: '#3a2f1f',
-    card: '#fffaf0',
+    primary: '#cf6a45',
+    accent: '#e0a23c',
+    text: '#3a2a1c',
+    card: '#fdf4e6',
   },
   backgroundCss:
-    'linear-gradient(135deg, #f6d186 0%, #f6b06a 35%, #d97448 65%, #5f7a8a 100%)',
+    'linear-gradient(135deg, #f3e3c9 0%, #e0a23c 45%, #cf6a45 100%)',
   font: 'Quicksand',
 };
 

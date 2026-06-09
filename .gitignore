@@ -1,7 +1,7 @@
 # Build artifacts
 /public/
 editor/dist/
-editor/node_modules/
+**/node_modules/
 
 # Logs / OS
 .DS_Store
@@ -9,3 +9,8 @@ editor/node_modules/
 
 # Firebase
 .firebase/
+
+# Service-account keys — never commit
+*serviceAccount*.json
+*-adminsdk-*.json
+*-key.json

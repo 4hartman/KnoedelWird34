@@ -13,14 +13,14 @@
   },
 
   "meta": {
-    "recipient": "Jubilar*in",
-    "occasion": "60. Geburtstag",
+    "recipient": "Mama & Papa",
+    "occasion": "Geburtstagsreise",
     "voteBarEnabled": true
   },
 
   "intro": {
-    "greeting": "Alles Gute zum 60., {recipient}!",
-    "subtitle": "Bevor wir das Geheimnis lueften — ein paar Fragen. Bauchgefuehl reicht!",
+    "greeting": "Alles Gute, {recipient}!",
+    "subtitle": "Bevor wir das Reiseziel lueften — ein paar Fragen. Bauchgefuehl reicht!",
     "buttonText": "Los geht's"
   },
 
@@ -46,96 +46,107 @@
   "questions": [
     {
       "id": "q1",
-      "question": "Was klingt nach perfektem Urlaubsmorgen?",
-      "hint": "Bauchgefuehl reicht!",
+      "question": "Welche Emojis sprechen euch mehr an?",
       "options": [
-        { "id": "a", "text": "Espresso auf einer sonnigen Terrasse, Zikaden im Hintergrund", "points": { "corsica": 1 } },
-        { "id": "b", "text": "Kaffee mit Wind in den Haaren am weiten Sandstrand", "points": { "denmark": 1 } }
+        { "id": "a", "text": "🌞🌊🐠🥐🥖🌄👒👙", "points": { "corsica": 2 } },
+        { "id": "b", "text": "🌬️🐚🌊🧖‍♀️🫧🔥🌭🍦", "points": { "denmark": 2 } }
       ]
     },
     {
       "id": "q2",
-      "question": "Welches Mittagessen klingt verlockender?",
+      "question": "Wie erreichen wir bestenfalls unser Reiseziel?",
       "options": [
-        { "id": "a", "text": "Frische Meeresfruechte und ein Glas Wein", "points": { "corsica": 2 } },
-        { "id": "b", "text": "Smoerrebroed mit Hering und ein kuehles Bier", "points": { "denmark": 2 } },
-        { "id": "c", "text": "Egal — Hauptsache draussen und in guter Gesellschaft", "points": {} }
+        { "id": "a", "text": "Auto vollpacken und los – wir fahren selbst!", "points": { "denmark": 2 } },
+        { "id": "b", "text": "Der Drahtesel bringt uns ans Ziel bzw.: der Weg ist das Ziel!", "points": {} },
+        { "id": "c", "text": "Mit Fredo das erste Mal in den Flieger!", "points": { "corsica": 2 } }
       ]
     },
     {
       "id": "q3",
-      "question": "Nur aus Spass: Sandburg oder Kieselstein-Turm?",
+      "question": "Auf der Karte sieht unser Ziel bestenfalls so aus:",
       "options": [
-        { "id": "a", "text": "Sandburg, klar — mit Graben und Wimpel!" },
-        { "id": "b", "text": "Kieselstein-Turm, kunstvoll und meditativ." }
+        { "id": "a", "image": "images/map_daenemark.png", "alt": "Silhouette einer daenischen Insel", "points": { "denmark": 2 } },
+        { "id": "b", "image": "images/map_korsika.png", "alt": "Silhouette von Korsika", "points": { "corsica": 2 } },
+        { "id": "c", "image": "images/map_other.png", "alt": "Silhouette anderer Inseln", "points": {} }
       ]
     },
     {
       "id": "q4",
-      "question": "Welche Landschaft laesst dein Herz huepfen?",
+      "question": "Euer Traum-Feriendomizil",
       "options": [
-        { "id": "a", "text": "Steile Kuestenklippen ueber tuerkisem Wasser", "points": { "corsica": 2 } },
-        { "id": "b", "text": "Endlose Duenen und ein Meer aus Strandhafer", "points": { "denmark": 2 } },
-        { "id": "c", "text": "Bunte Wildblumenwiesen — die gibt's ueberall", "points": { "corsica": 1, "denmark": 1 } }
+        { "id": "a", "image": "images/domizil_korsika.jpg", "alt": "Villa mit Pool", "points": { "corsica": 2 } },
+        { "id": "b", "image": "images/domizil_daenemark.jpg", "alt": "Holzterrasse am Meer", "points": { "denmark": 2 } },
+        { "id": "c", "image": "images/domizil_hobbit.jpg", "alt": "Hobbit-Haus", "points": {} }
       ]
     },
     {
       "id": "q5",
-      "question": "Welches Bild zieht dich mehr an?",
-      "hint": "Tipp: 'image' im JSON ersetzt den Button-Text durch ein Bild.",
+      "question": "Was passiert direkt nach der Ankunft?",
       "options": [
-        { "id": "a", "image": "images/corsica-placeholder.svg", "alt": "Sonne ueber dem Mittelmeer", "text": "Mittagssonne am Felsenkap", "points": { "corsica": 1 } },
-        { "id": "b", "image": "images/denmark-placeholder.svg", "alt": "Duenen mit Nordsee im Hintergrund",  "text": "Duenen und Nordseewind",     "points": { "denmark": 1 } }
+        { "id": "a", "text": "Mama muss erstmal dringend pinkeln", "points": {} },
+        { "id": "b", "text": "Papa schaltet den TV ein", "points": {} },
+        { "id": "c", "text": "Julius checkt die Surfbedingungen", "points": {} }
       ]
     },
     {
       "id": "q6",
-      "question": "Abends — was klingt besser?",
+      "question": "Welchen Tieren begegnen wir?",
       "options": [
-        { "id": "a", "text": "Auf einer Dorfplatz-Bank Pastis schluerfen", "points": { "corsica": 1 } },
-        { "id": "b", "text": "Am Hafen sitzen, Lichterketten im Wind", "points": { "denmark": 1 } },
-        { "id": "c", "text": "Frueh ins Bett — der Tag war schoen genug", "points": {} }
+        { "id": "a", "image": "images/animals_ziegen_korsika.jpg", "alt": "Ziegen auf der Strasse", "text": "Ziegen auf der Straße", "points": { "corsica": 2 } },
+        { "id": "b", "image": "images/animals_robben_daenemark.jpg", "alt": "Robben am Strand", "text": "Robben am Strand", "points": { "denmark": 2 } },
+        { "id": "c", "image": "images/animals_katze_zuhause.jpg", "alt": "Die Hauskatze", "text": "Der Hauskatze (zu Hause bleiben)", "points": {} }
       ]
     },
     {
       "id": "q7",
-      "question": "Spass-Frage: Welche Augenfarbe hat der Reisefuehrer (wenn du dir einen ausdenkst)?",
+      "question": "Wie startet euer perfekter Urlaubstag?",
       "options": [
-        { "id": "a", "text": "Tiefblau wie das Meer" },
-        { "id": "b", "text": "Sonnengoldbraun" },
-        { "id": "c", "text": "Sage ich nicht — der ist scheu!" }
+        { "id": "a", "text": "Frühstück auf der sonnigen Terrasse am Pool", "points": { "corsica": 2 } },
+        { "id": "b", "text": "Hauptsache ausschlafen!", "points": { "corsica": 1, "denmark": 1 } },
+        { "id": "c", "text": "Drinnen gemütlich frühstücken, mit Blick auf das raue Meer", "points": { "denmark": 2 } }
       ]
     },
     {
       "id": "q8",
-      "question": "Welches Souvenir nimmst du mit nach Hause?",
+      "question": "Was soll es zum Frühstück geben?",
       "options": [
-        { "id": "a", "text": "Olivenoel und korsischen Honig", "points": { "corsica": 2 } },
-        { "id": "b", "text": "Daenisches Designstueck und Lakritz", "points": { "denmark": 2 } }
+        { "id": "a", "image": "images/breakfast_smorrebrod.jpg", "alt": "Smoerrebroed", "text": "Smørrebrød", "points": { "denmark": 2 } },
+        { "id": "b", "image": "images/breakfast_cornflakes.jpg", "alt": "Cornflakes", "text": "Cornflakes", "points": {} },
+        { "id": "c", "image": "images/breakfast_croissants.jpg", "alt": "Croissants mit Konfituere", "text": "Croissants mit Konfitüre", "points": { "corsica": 2 } }
       ]
     },
     {
       "id": "q9",
-      "question": "Welches Wetter macht dir wirklich gute Laune?",
+      "question": "Was ist das perfekte Urlaubswetter?",
       "options": [
-        { "id": "a", "text": "30 Grad und ein lauer Wind", "points": { "corsica": 1 } },
-        { "id": "b", "text": "22 Grad, frische Brise, gelegentliche Wolken", "points": { "denmark": 1 } }
+        { "id": "a", "text": "Hauptsache frische Luft — Schwitzen will ich nur in der Sauna!", "points": { "denmark": 2 } },
+        { "id": "b", "text": "Ganz viel Schnee, bitte!", "points": {} },
+        { "id": "c", "text": "20 Grad und Sonne — perfekt!", "points": { "corsica": 2 } }
       ]
     },
     {
       "id": "q10",
-      "question": "Letzte Frage: Welches Geraeusch entspannt dich am meisten?",
+      "question": "Wählt eine gelungene Urlaubsaktivität!",
       "options": [
-        { "id": "a", "text": "Wellen, die an Felsen klatschen", "points": { "corsica": 1 } },
-        { "id": "b", "text": "Wind, der durchs Duenengras streicht", "points": { "denmark": 1 } },
-        { "id": "c", "text": "Stille — einfach gar nichts.", "points": {} }
+        { "id": "a", "text": "Eine Runde Boule auf dem eigenen Boule-Platz", "points": { "corsica": 2 } },
+        { "id": "b", "text": "Mit Bierchen in den Pool", "points": { "corsica": 1, "denmark": 1 } },
+        { "id": "c", "text": "Spaziergang am Meer und danach ab in die Sauna", "points": { "denmark": 2 } }
+      ]
+    },
+    {
+      "id": "q11",
+      "question": "Womit stoßen wir im Urlaub an?",
+      "options": [
+        { "id": "a", "image": "images/drinks_babyflasche.jpg", "alt": "Babyflaeschchen", "text": "Babyfläschchen", "points": { "corsica": 1, "denmark": 1 } },
+        { "id": "b", "image": "images/drinks_cap_corse.jpg", "alt": "Cap Corse Cocktails", "text": "Cap Corse Cocktails", "points": { "corsica": 2 } },
+        { "id": "c", "image": "images/drinks_carlsberg.jpg", "alt": "Carlsberg Bier", "text": "Carlsberg Bier", "points": { "denmark": 2 } }
       ]
     }
   ],
 
   "tiebreaker": {
     "id": "tb",
-    "question": "Unentschieden! Letzte Entscheidung: Welcher Geruch lockt dich mehr?",
+    "question": "Unentschieden! Letzte Entscheidung: Welcher Geruch lockt euch mehr?",
     "options": [
       { "id": "a", "text": "Pinienwald in der Mittagshitze", "winner": "corsica" },
       { "id": "b", "text": "Salziger Nordseewind am Morgen", "winner": "denmark" }

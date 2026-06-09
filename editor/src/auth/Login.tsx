@@ -4,6 +4,7 @@
 
 import { useState } from 'react';
 import { useAuth } from './AuthContext';
+import { Logo } from '../brand/Logo';
 
 export function Login() {
   const { signInGoogle, signInEmail, registerEmail } = useAuth();
@@ -28,8 +29,9 @@ export function Login() {
   return (
     <div className="auth-screen">
       <div className="auth-card">
-        <h1>🎁 Geschenk-Editor</h1>
-        <p className="muted">Melde dich an, um deine Quiz-Geschenke zu erstellen.</p>
+        <Logo size={48} />
+        <p className="tagline">Ein Geschenk, das man durch Spielen öffnet.</p>
+        <p className="muted">Melde dich an, um deine Überraschungen zu gestalten.</p>
 
         <button
           className="btn btn-google"

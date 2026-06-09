@@ -1,14 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Quicksand:wght@400;500;600;700&display=swap');
+
 :root {
-  --primary: #b18540;
-  --accent: #d97448;
-  --text: #3a2f1f;
-  --card: #fffaf0;
-  --bg: linear-gradient(135deg, #f6d186 0%, #f6b06a 35%, #d97448 65%, #5f7a8a 100%);
+  /* Unwrap — warm & handmade palette (see BRANDING.md) */
+  --primary: #cf6a45;
+  --accent: #e0a23c;
+  --ember: #b6432b;
+  --text: #3a2a1c;
+  --card: #fdf4e6;
+  --sand: #f3e3c9;
+  --sage: #7c8a6a;
+  --bg: linear-gradient(135deg, #e0a23c 0%, #cf6a45 55%, #b6432b 100%);
+  --display: 'Fraunces', 'Playfair Display', Georgia, serif;
   font-family: 'Quicksand', system-ui, -apple-system, sans-serif;
   color: var(--text);
 }
 
 * { box-sizing: border-box; }
+
+h1, h2, h3, .brand-wordmark { font-family: var(--display); }
+.brand-wordmark { font-size: 1.5rem; font-weight: 600; color: var(--text); letter-spacing: 0.2px; }
 
 body {
   margin: 0;
@@ -111,7 +121,10 @@ button { font-family: inherit; cursor: pointer; }
   margin-bottom: 1.5rem;
 }
 .app-header h1 { margin: 0; font-size: 1.4rem; flex: 1; }
+.app-header .brand-logo { margin-right: auto; }
 .header-actions { display: flex; align-items: center; gap: 1rem; }
+.tagline { font-family: var(--display); font-style: italic; font-size: 1.05rem;
+  color: var(--primary); margin: 0.5rem 0 0.25rem; }
 
 /* ─── Project grid ────────────────────────── */
 .project-grid {

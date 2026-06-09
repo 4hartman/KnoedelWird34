@@ -1,0 +1,25 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Unwrap">
+  <defs>
+    <linearGradient id="unwrapWarm" x1="12" y1="14" x2="52" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#e0a23c"/>
+      <stop offset="0.55" stop-color="#cf6a45"/>
+      <stop offset="1" stop-color="#b6432b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- spark escaping the box -->
+  <path d="M45 8 L47 14 L53 16 L47 18 L45 24 L43 18 L37 16 L43 14 Z" fill="#e0a23c"/>
+  <circle cx="52" cy="25" r="1.8" fill="#cf6a45"/>
+  <circle cx="38" cy="9" r="1.4" fill="#e0a23c"/>
+
+  <!-- box body -->
+  <rect x="13" y="31" width="38" height="21" rx="4" fill="url(#unwrapWarm)"/>
+  <!-- ribbon down the body -->
+  <rect x="29.5" y="31" width="5" height="21" fill="#fdf4e6"/>
+
+  <!-- lid, lifted and tilted as if just opened -->
+  <g transform="rotate(-7 32 27)">
+    <rect x="9" y="22" width="46" height="11" rx="3" fill="#e0a23c"/>
+    <rect x="29.5" y="22" width="5" height="11" fill="#fdf4e6"/>
+  </g>
+</svg>

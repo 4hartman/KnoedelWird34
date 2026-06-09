@@ -7,18 +7,19 @@
    palette, background, and font without predefined CSS classes. */
 :root {
   --theme-font: 'Quicksand', sans-serif;
-  --theme-bg: linear-gradient(135deg, #f6d186 0%, #f6b06a 35%, #d97448 65%, #5f7a8a 100%);
-  --theme-primary: #b18540;
-  --theme-accent: #d97448;
+  --theme-bg: linear-gradient(135deg, #f3e3c9 0%, #e0a23c 45%, #cf6a45 100%);
+  --theme-primary: #cf6a45;
+  --theme-accent: #e0a23c;
 }
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
-  align-items: center;
-  justify-content: center;
   font-family: var(--theme-font);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   color: #3a2f1f;
 }
 
@@ -43,7 +44,9 @@ body {
   100% { transform: translateY(-10vh) scale(1); opacity: 0; }
 }
 
-#app { position: relative; max-width: 640px; width: 92%; }
+/* margin:auto centers #app on both axes but, unlike align/justify-center,
+   stays scroll-safe when the card is taller than the screen (no clipped top). */
+#app { position: relative; max-width: 640px; width: 92%; margin: auto; padding: 24px 0 96px; }
 
 .card {
   background: rgba(255, 248, 235, 0.78);
