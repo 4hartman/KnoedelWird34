@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,800;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Nunito:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,800;1,700&family=Quicksand:wght@400;600;700&display=swap');
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -7,6 +7,7 @@
    palette, background, and font without predefined CSS classes. */
 :root {
   --theme-font: 'Quicksand', sans-serif;
+  --theme-heading-font: 'Playfair Display', serif;
   --theme-bg: linear-gradient(135deg, #f3e3c9 0%, #e0a23c 45%, #cf6a45 100%);
   --theme-primary: #cf6a45;
   --theme-accent: #e0a23c;
@@ -83,7 +84,7 @@ body {
 }
 
 .question {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--theme-heading-font);
   font-size: 1.55rem; line-height: 1.4;
   font-weight: 600;
   color: #2a1f0f;
@@ -115,7 +116,7 @@ body {
   color: #2a1f0f;
   border-radius: 60px;
   font-size: 1.02rem;
-  font-family: 'Quicksand', sans-serif;
+  font-family: var(--theme-font);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.25s ease;
@@ -191,7 +192,7 @@ body {
 }
 
 .reveal-title {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--theme-heading-font);
   font-style: italic;
   font-size: 2.6rem;
   margin-bottom: 6px;
@@ -199,7 +200,7 @@ body {
   text-shadow: 0 2px 18px rgba(0,0,0,0.35);
 }
 .reveal-destination {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--theme-heading-font);
   font-size: 2.6rem;
   font-weight: 800;
   letter-spacing: 1.5px;
@@ -243,7 +244,7 @@ body {
 }
 
 .intro-greeting {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--theme-heading-font);
   font-style: italic;
   font-size: 2.6rem;
   line-height: 1.15;
@@ -258,7 +259,7 @@ body {
 }
 .intro-badge {
   display: inline-block;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--theme-heading-font);
   font-weight: 800;
   font-size: 4.2rem;
   line-height: 1;
@@ -283,7 +284,7 @@ body {
   animation: drumShake 0.15s ease-in-out infinite alternate;
 }
 .drumroll-text {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--theme-heading-font);
   font-size: 1.5rem;
   font-weight: 600;
   font-style: italic;
@@ -451,7 +452,7 @@ body:has(.vote-bar:not([hidden])) #app {
 }
 .vote-side-panel__total {
   text-align: center;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--theme-heading-font);
   font-size: 1.6rem;
   font-weight: 700;
   color: #2a1f0f;
@@ -486,7 +487,7 @@ body:has(.vote-bar:not([hidden])) #app {
   font-size: 0.9rem;
 }
 .vote-side-panel__pct {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--theme-heading-font);
   font-weight: 700;
   font-size: 1.4rem;
   color: #2a1f0f;
@@ -627,7 +628,7 @@ body:has(.vote-bar:not([hidden])) #app {
   background: none;
   border: none;
   padding: 4px 10px;
-  font-family: 'Quicksand', sans-serif;
+  font-family: var(--theme-font);
   font-size: 0.78rem;
   letter-spacing: 1.8px;
   text-transform: uppercase;

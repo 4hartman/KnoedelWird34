@@ -63,6 +63,7 @@ export interface ThemeConfig {
   backgroundCss: string;
   backgroundImage?: string;
   font: string;
+  headingFont: string;
 }
 
 export interface Project {

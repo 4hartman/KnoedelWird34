@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Quicksand:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Nunito:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,800;1,700&family=Quicksand:wght@400;500;600;700&display=swap');
 
 :root {
   /* Unwrap — warm & handmade palette (see BRANDING.md) */
@@ -368,12 +368,12 @@ button { font-family: inherit; cursor: pointer; }
 .p-occasion { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase;
   color: var(--p-primary); font-weight: 700; }
 .p-greeting { font-size: 1.4rem; font-weight: 700; margin: 0.4rem 0;
-  font-family: 'Playfair Display', serif; font-style: italic; }
+  font-family: var(--p-heading-font); font-style: italic; }
 .p-subtitle { font-size: 0.85rem; color: #5a4a30; margin-bottom: 0.8rem; }
 .p-step { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
   color: var(--p-primary); font-weight: 700; }
 .p-question { font-size: 1.1rem; font-weight: 600; margin: 0.4rem 0 0.6rem;
-  font-family: 'Playfair Display', serif; }
+  font-family: var(--p-heading-font); }
 .p-hint { font-size: 0.75rem; font-style: italic; color: #6a553a;
   background: rgba(177, 133, 64, 0.12); border-left: 3px solid var(--p-primary);
   padding: 0.4rem 0.6rem; border-radius: 0 8px 8px 0; margin-bottom: 0.6rem; text-align: left; }
@@ -394,7 +394,7 @@ button { font-family: inherit; cursor: pointer; }
 .p-btn-primary { background: var(--p-primary); color: #fff; border: none; }
 .p-reveal { background: rgba(0, 0, 0, 0.3); color: #fff; }
 .p-emoji { font-size: 2.5rem; }
-.p-reveal-title { font-family: 'Playfair Display', serif; font-style: italic;
+.p-reveal-title { font-family: var(--p-heading-font); font-style: italic;
   font-size: 1.4rem; }
 .p-reveal-dest { font-size: 1.5rem; font-weight: 800; text-transform: uppercase;
   letter-spacing: 1px; margin: 0.3rem 0; }

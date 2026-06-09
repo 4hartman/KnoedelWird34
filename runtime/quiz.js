@@ -51,6 +51,7 @@
     if (!theme) return;
     var root = document.documentElement.style;
     if (theme.font) root.setProperty('--theme-font', "'" + theme.font + "', sans-serif");
+    if (theme.headingFont) root.setProperty('--theme-heading-font', "'" + theme.headingFont + "', serif");
     if (theme.backgroundImage) {
       root.setProperty('--theme-bg', "url('" + theme.backgroundImage + "')");
     } else if (theme.backgroundCss) {

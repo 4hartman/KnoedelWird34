@@ -21,6 +21,7 @@ export function PreviewPane({ config, theme }: Props) {
     '--p-primary': theme.palette.primary,
     '--p-accent': theme.palette.accent,
     '--p-font': `'${theme.font}', sans-serif`,
+    '--p-heading-font': `'${theme.headingFont ?? 'Playfair Display'}', serif`,
   } as React.CSSProperties;
 
   const greeting = config.intro.greeting.replace(

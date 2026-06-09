@@ -25,7 +25,7 @@ const BACKGROUND_PRESETS: { name: string; css: string }[] = [
   { name: 'Nacht', css: 'linear-gradient(135deg, #0f1b3c 0%, #3a3f7a 50%, #8b6fb0 100%)' },
 ];
 
-const FONTS = ['Quicksand', 'Playfair Display', 'Georgia', 'system-ui'];
+const FONTS = ['Quicksand', 'Nunito', 'Playfair Display', 'Fraunces', 'Georgia', 'system-ui'];
 
 const PALETTE_FIELDS: { key: keyof ThemeConfig['palette']; label: string }[] = [
   { key: 'primary', label: 'Primärfarbe' },
@@ -80,17 +80,33 @@ export function ThemeTab({ uid, projectId, theme, onChange }: Props) {
         onChange={(url) => onChange({ ...theme, backgroundImage: url })}
       />
 
-      <h3>Schrift</h3>
-      <label className="field">
-        <select
-          value={theme.font}
-          onChange={(e) => onChange({ ...theme, font: e.target.value })}
-        >
-          {FONTS.map((f) => (
-            <option key={f} value={f}>{f}</option>
-          ))}
-        </select>
-      </label>
+      <h3>Schriften</h3>
+      <div className="grid-2">
+        <label className="field">
+          <span>Überschriften</span>
+          <select
+            value={theme.headingFont ?? 'Playfair Display'}
+            onChange={(e) => onChange({ ...theme, headingFont: e.target.value })}
+            style={{ fontFamily: `'${theme.headingFont ?? 'Playfair Display'}', serif` }}
+          >
+            {FONTS.map((f) => (
+              <option key={f} value={f} style={{ fontFamily: `'${f}'` }}>{f}</option>
+            ))}
+          </select>
+        </label>
+        <label className="field">
+          <span>Fließtext</span>
+          <select
+            value={theme.font}
+            onChange={(e) => onChange({ ...theme, font: e.target.value })}
+            style={{ fontFamily: `'${theme.font}', sans-serif` }}
+          >
+            {FONTS.map((f) => (
+              <option key={f} value={f} style={{ fontFamily: `'${f}'` }}>{f}</option>
+            ))}
+          </select>
+        </label>
+      </div>
     </div>
   );
 }
