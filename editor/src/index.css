@@ -458,3 +458,30 @@ button { font-family: inherit; cursor: pointer; }
 .qr-actions { display: flex; gap: 1rem; }
 .qr { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
 .qr img { width: 200px; height: 200px; border-radius: 12px; background: #fff; padding: 8px; }
+
+/* ─── Editor layout with persistent side preview ─── */
+.editor-page { max-width: 1240px; }
+.editor-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 372px;
+  gap: 1.5rem;
+  align-items: start;
+}
+.editor-col { min-width: 0; }
+.editor-preview {
+  position: sticky;
+  top: 1rem;
+  background: var(--card);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+.editor-preview .tab-panel > h2 { font-size: 1.1rem; }
+.editor-preview .phone { margin: 0.5rem auto 0; }
+.editor-preview .phone-screen { max-height: calc(100vh - 9rem); }
+
+@media (max-width: 1024px) {
+  .editor-layout { grid-template-columns: 1fr; }
+  .editor-preview { position: static; }
+  .editor-preview .phone-screen { max-height: 70vh; }
+}

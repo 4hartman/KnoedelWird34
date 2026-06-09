@@ -15,14 +15,13 @@ import { PublishTab } from './tabs/PublishTab';
 import { PreviewPane } from './PreviewPane';
 import { useAuth } from '../auth/AuthContext';
 
-type TabKey = 'general' | 'outcomes' | 'questions' | 'theme' | 'preview' | 'publish';
+type TabKey = 'general' | 'outcomes' | 'questions' | 'theme' | 'publish';
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: 'general', label: 'Allgemein' },
   { key: 'outcomes', label: 'Ergebnisse' },
   { key: 'questions', label: 'Fragen' },
   { key: 'theme', label: 'Design' },
-  { key: 'preview', label: 'Vorschau' },
   { key: 'publish', label: 'Veröffentlichen' },
 ];
 
@@ -82,44 +81,51 @@ function EditorBody({
         <button className="btn-inline" onClick={() => void save()}>Speichern</button>
       </header>
 
-      <nav className="tabs">
-        {TABS.map((t) => (
-          <button
-            key={t.key}
-            className={`tab ${tab === t.key ? 'active' : ''}`}
-            onClick={() => setTab(t.key)}
-          >
-            {t.label}
-          </button>
-        ))}
-      </nav>
+      <div className="editor-layout">
+        <div className="editor-col">
+          <nav className="tabs">
+            {TABS.map((t) => (
+              <button
+                key={t.key}
+                className={`tab ${tab === t.key ? 'active' : ''}`}
+                onClick={() => setTab(t.key)}
+              >
+                {t.label}
+              </button>
+            ))}
+          </nav>
 
-      <main className="editor-main">
-        {tab === 'general' && <GeneralTab config={config} onChange={setConfig} />}
-        {tab === 'outcomes' && <OutcomesTab config={config} onChange={setConfig} />}
-        {tab === 'questions' && (
-          <QuestionsTab
-            config={config}
-            onChange={setConfig}
-            uid={uid}
-            projectId={projectId}
-          />
-        )}
-        {tab === 'theme' && (
-          <ThemeTab uid={uid} projectId={projectId} theme={theme} onChange={setTheme} />
-        )}
-        {tab === 'preview' && <PreviewPane config={config} theme={theme} />}
-        {tab === 'publish' && (
-          <PublishTab
-            projectId={projectId}
-            title={project.title}
-            config={config}
-            initialSlug={project.slug}
-            initialPublished={project.published}
-            onSaveFirst={save}
-          />
-        )}
-      </main>
+          <main className="editor-main">
+            {tab === 'general' && <GeneralTab config={config} onChange={setConfig} />}
+            {tab === 'outcomes' && <OutcomesTab config={config} onChange={setConfig} />}
+            {tab === 'questions' && (
+              <QuestionsTab
+                config={config}
+                onChange={setConfig}
+                uid={uid}
+                projectId={projectId}
+              />
+            )}
+            {tab === 'theme' && (
+              <ThemeTab uid={uid} projectId={projectId} theme={theme} onChange={setTheme} />
+            )}
+            {tab === 'publish' && (
+              <PublishTab
+                projectId={projectId}
+                title={project.title}
+                config={config}
+                initialSlug={project.slug}
+                initialPublished={project.published}
+                onSaveFirst={save}
+              />
+            )}
+          </main>
+        </div>
+
+        <aside className="editor-preview">
+          <PreviewPane config={config} theme={theme} />
+        </aside>
+      </div>
     </div>
   );
 }
