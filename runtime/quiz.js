@@ -36,7 +36,7 @@
     voteSidePanel = document.getElementById('vote-side-panel');
     createParticles();
     loadConfig()
-      .then(function () { applyTheme(state.theme); })
+      .then(function () { applyTheme(state.theme); setDocumentTitle(); })
       .then(bootstrapRole)
       .catch(function (err) {
         console.error('Boot failed', err);
@@ -60,6 +60,16 @@
       if (theme.palette.primary) root.setProperty('--theme-primary', theme.palette.primary);
       if (theme.palette.accent) root.setProperty('--theme-accent', theme.palette.accent);
     }
+  }
+
+  // Sets the browser tab title from the gift's occasion and recipient so each
+  // published gift shows its own name instead of a hardcoded default.
+  function setDocumentTitle() {
+    var meta = (state.config && state.config.meta) || {};
+    var parts = [];
+    if (meta.occasion) parts.push(meta.occasion);
+    if (meta.recipient) parts.push(meta.recipient);
+    document.title = parts.length ? parts.join(' — ') : 'Ein Geschenk für dich';
   }
 
   // Resolves the gift slug from the URL. Published gifts are served at
